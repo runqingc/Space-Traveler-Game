@@ -3,9 +3,8 @@ package edu.uchicago.gerber._02arrays;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Scanner;
 
-public class E7_5 {
+public class P7_5 {
 
 
     // define fields
@@ -34,10 +33,10 @@ public class E7_5 {
 
     // define constructor
 
-    public E7_5() {
+    public P7_5() {
     }
 
-    public E7_5(String filePath) {
+    public P7_5(String filePath) {
         this.filePath = filePath;
     }
 
@@ -122,7 +121,7 @@ public class E7_5 {
 
     // define main function
     public static void main(String[] args){
-        E7_5 csvReader = new E7_5("example.csv");
+        P7_5 csvReader = new P7_5("example.csv");
 
         System.out.println("The number of rows: " + csvReader.numberOfRows());
         System.out.println("The number of fields in column 5: " +csvReader.numberOfFields(5));

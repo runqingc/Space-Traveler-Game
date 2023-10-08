@@ -14,7 +14,7 @@ Since Java5, you can even specify a variable number of arguments aka varargs whi
 Notice that the varargs parameter "String... strNickNames" must be listed last.  Calling this method would look something like this:
  String[] strReturnValues = someMethod(99, "Jim", "Jamie", "James", "Jamey", "Jimmy", "Jimbo");
 
-
+-------------------------------------------
 
 R5.8 Pseudocode
 let String ans = ""
@@ -32,7 +32,7 @@ for every character c in the telephone number:
         if c is W, X or Y, add "9" to the end of the ans
 return ans as result
 
-
+-------------------------------------------
 
 R5.10 Variable scope
 the i defined in line 5 only affects main, and will die out on line 8
@@ -45,4 +45,49 @@ the static int f(int i) aims to find out the smaller integer n whose square is l
 equal to i
 the program will out put 0+1+1+1+2+2+2+2+2+3 = 26
 
+-------------------------------------------
 
+R5.14
+The variable a and b define in falseSwap dies when the function end.
+In other words, the falseSwap only swaps the temporary variable a and b, not the
+actual variable x and y
+
+-------------------------------------------
+
+R6.3
+a. 25
+b. 13
+c. 12
+d. 0
+e. 10
+f. 25
+g. 12
+h. 3
+
+-------------------------------------------
+
+R6.10
+a. for (float value : values) {
+       total = total + value;
+   }
+b. boolean skipFirst = true;
+   for (float value : values) {
+       if (skipFirst) {
+           skipFirst = false;
+           continue;
+       }
+       total = total + value;
+   }
+
+
+
+-------------------------------------------
+
+
+-------------------------------------------
+
+
+-------------------------------------------
+
+
+-------------------------------------------
