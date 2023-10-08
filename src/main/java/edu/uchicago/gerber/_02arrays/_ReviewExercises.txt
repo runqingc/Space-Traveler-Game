@@ -16,5 +16,33 @@ Notice that the varargs parameter "String... strNickNames" must be listed last. 
 
 
 
+R5.8 Pseudocode
+let String ans = ""
+for every character c in the telephone number:
+    if the c is not a uppercase letter, add it directly to the end of the string
+        ans += c
+    else, if c is a character：
+        if c is A, B or C, add "2" to the end of the ans
+        if c is D, E or F, add "3" to the end of the ans
+        if c is G, H or I, add "4" to the end of the ans
+        if c is J, K or L, add "5" to the end of the ans
+        if c is M, N or O, add "6" to the end of the ans
+        if c is P, Q, R or S, add "7" to the end of the ans
+        if c is T, U or V, add "8" to the end of the ans
+        if c is W, X or Y, add "9" to the end of the ans
+return ans as result
+
+
+
+R5.10 Variable scope
+the i defined in line 5 only affects main, and will die out on line 8
+the b defined in line 6 only affects main, and will die out on line 8
+the n defined in line 12 will live until the program end
+the b defined in line 19 will live until the program end
+the i defined in line 22 only affects the content of for loop, and will die in line 24
+
+the static int f(int i) aims to find out the smaller integer n whose square is less then or
+equal to i
+the program will out put 0+1+1+1+2+2+2+2+2+3 = 26
 
 
