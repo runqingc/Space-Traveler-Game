@@ -37,6 +37,5 @@ public class E6_1 {
         System.out.println("First and last element: ");
         System.out.println(randomArray.get(0));
         System.out.println(randomArray.get(9));
-
     }
 }
