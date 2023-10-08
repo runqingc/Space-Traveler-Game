@@ -5,14 +5,13 @@ import java.util.ArrayList;
 public class P5_8 {
 
     public static boolean isLeapYear(int year){
-        if(year%400==0){
+        if(year<0){
+            return false;
+        }else if(year%400==0){
             return true;
         }else{
-            if(year%100!=0 && year%4==0){
-                return true;
-            }
+            return year % 100 != 0 && year % 4 == 0;
         }
-        return false;
     }
 
     public static void main(String[] args){
@@ -32,12 +31,10 @@ public class P5_8 {
         assert !isLeapYear(1805);
         assert !isLeapYear(1903);
         assert !isLeapYear(2019);
-        // Uncomment if your function supports BCE
-        // assert isLeapYear(-4) == true;
-        // assert isLeapYear(-5) == false;
+        assert isLeapYear(-4);
+        assert !isLeapYear(-5);
 
         System.out.println("All tests passed!");
-
 
     }
 
