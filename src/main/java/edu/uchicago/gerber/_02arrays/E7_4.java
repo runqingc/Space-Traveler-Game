@@ -17,6 +17,7 @@ public class E7_4 {
                 writer.write("/*"+i+"*/");
                 writer.write(line);
                 writer.newLine();
+                ++i;
             }
         } catch (IOException e) {
             e.printStackTrace();
