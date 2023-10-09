@@ -8,6 +8,7 @@ public class Driver {
         microwave.start();
         microwave.increaseTime();
         microwave.setLevel(2);
+        microwave.increaseTime();
         microwave.start();
         microwave.reset();
         microwave.start();
