@@ -21,7 +21,6 @@ public class Driver {
         votingMachine.voteRepublican();
         votingMachine.voteDemocrat();
         votingMachine.getTally();
-        
     }
 
 }
