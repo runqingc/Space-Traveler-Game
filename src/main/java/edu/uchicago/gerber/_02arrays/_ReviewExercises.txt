@@ -70,24 +70,131 @@ R6.10
 a. for (float value : values) {
        total = total + value;
    }
-b. boolean skipFirst = true;
+b. boolean skip = true;
    for (float value : values) {
-       if (skipFirst) {
+       if (skip) {
            skipFirst = false;
            continue;
        }
        total = total + value;
    }
+c.int index = 0;
+  for (float value : values) {
+      if (value == target) {
+          return index;
+      }
+      index++;
+  }
 
+
+-------------------------------------------
+
+R6.23
+int count = 1;
+int max = 1;
+for all numbers in array
+    if this number is not first number, and it is equal to the last number
+        ++count;
+        if count > max, max = count
+    else
+        count = 1
+return max
 
 
 -------------------------------------------
 
+R6.29
+int[][] values = new int[ROWS][COLUMNS];
+• Fill all entries with 0.
+for(int i=0; i<ROWS; ++i){
+    for(int j=0; j<COLUMNS; ++j){
+        values[i][j] = 0
+    }
+}
+• Fill elements alternately with 0s and 1s in a checkerboard pattern.
+boolean flag = true;
+for(int i=0; i<ROWS; ++i){
+    for(int j=0; j<COLUMNS; ++j){
+    if(flag){
+        values[i][j] = 1;
+    }else}
+        values[i][j] = 0
+    }
+}
+
+• Fill only the elements at the top and bottom row with zeroes.
+for(int j=0; i<COLUMNS; ++i){
+    values[0][j] = 0;
+    values[ROWS-1][j] = 0;
+}
+
+• Compute the sum of all elements.
+int sum = 0;
+for(int i=0; i<ROWS; ++i){
+    for(int j=0; j<COLUMNS; ++j){
+        sum += values[i][j];
+    }
+}
+return sum;
+• Print the array in tabular form.
+for(int i=0; i<ROWS; ++i){
+    for(int j=0; j<COLUMNS; ++j){
+        System.out.print(values[i][j] + " ")
+    }
+    System.out.println();
+}
 
 -------------------------------------------
 
+R6.34
+True or false?
+a. All elements of an array list are of the same type. T
+b. Array list index values must be integers. T
+c. Array lists cannot contain strings as elements. F
+d. Array lists can change their size, getting larger or smaller.T
+e. A method cannot return an array list. F
+f. A method cannot change the size of an array list argument. F
 
 -------------------------------------------
 
+R7.1 will throw exception in both case
 
 -------------------------------------------
+
+R7.6Throwing an exception: When a program encounters an
+anomalous situation that it can't handle
+(e.g., dividing by zero, accessing a null object),
+it throws an exception.When you expect that a piece of code might throw an exception and you want to handle that
+exception rather than letting it propagate up to
+higher levels in the call stack, you catch that exception.
+
+-------------------------------------------
+
+R7.7
+Checked exception: These are exceptions that a program should anticipate and recover from.
+The Java compiler checks at compile-time to make sure that these exceptions are either
+caught or declared in the method signature using the throws keyword.
+An example of a checked exception is FileNotFoundException.
+
+-------------------------------------------
+
+R7.8
+IndexOutOfBoundsException is an unchecked exception because it's a subclass of RuntimeException.
+It often indicates a programming error, such as trying to access an array or list using an invalid index.
+
+-------------------------------------------
+
+R7.11
+When your program catches an exception using a catch clause, it receives an exception object
+
+-------------------------------------------
+
+R7.15
+The next() and nextInt() methods of the Scanner class can throw the following exceptions:
+NoSuchElementException: This exception is thrown if no token is found (for next()) or
+if the input doesn't match the expected pattern (for nextInt()).
+It indicates that the scanner has reached the end of the input without finding the
+expected token.
+
+IllegalStateException: This exception is thrown if the scanner
+is closed when these methods are called.
