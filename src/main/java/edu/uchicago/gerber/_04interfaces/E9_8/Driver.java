@@ -7,15 +7,18 @@ public class Driver {
     public static void main(String[] args){
 
         // Step 1: Create an array of BankAccount
-        BankAccount[] accounts = new BankAccount[10];
+        BankAccount[] accounts = new BankAccount[15];
 
         // Step 2: Initialize the array with checking and savings accounts
         for (int i = 0; i < 5; i++) {
-            accounts[i] = new CheckingAccount();
+            accounts[i] = new BasicAccount();
         }
         for (int i = 5; i < 10; i++) {
             accounts[i] = new SavingsAccount();
             ((SavingsAccount) accounts[i]).setInterestRate(1.0); // Setting interest rate to 1% for simplicity
+        }
+        for (int i = 10; i < 15; i++) {
+            accounts[i] = new CheckingAccount();
         }
 
         Scanner in = new Scanner(System.in);
