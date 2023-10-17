@@ -5,5 +5,62 @@
 
 
 
+---------------------
+R9.1 Superclas and subclass
+a. super class: Employee; Subclass: Manager
+b. super class: GraduateStudent; Subclass: Student
+c. super class: Person; Subclass: Student
+d. super class: Employee; Subclass: Professor
+e. super class: BankAccount; Subclass: CheckingAccount
+f. super class: Vehicle; Subclass: Car
+g. super class: Vehicle; Subclass: Minivan
+h. super class: Car; Subclass: Manager
+i. super class: Vehicle; Subclass: Truck
+
+
+---------------------
+R9.2 superclass and subclass
+Because there's no need to do so. If one wants to manage the inventory, he/she can simply
+use a map to store the name of the items and the number of that item in stock.
+
+
+---------------------
+R9.4 SavingsAccount
+
+
+
+---------------------
+R9.6 Sandwich
+
+
+
+---------------------
+R9.7 Inheretence -use the UML diagram tool in IntelliJ and indicate to the grader where uml file is located
+
+
+
+---------------------
+R9.8 Inheretence -use the UML diagram tool in IntelliJ and indicate to the grader where uml file is located
+
+
+
+---------------------
+R9.9 Inheretence -use the UML diagram tool in IntelliJ and indicate to the grader where uml file is located
+
+
+
+---------------------
+R9.10 Casting
+
+
+
+---------------------
+R9.11 instanceof operator
+
+
+
+---------------------
+R9.14 Edible interface
+
 
 
