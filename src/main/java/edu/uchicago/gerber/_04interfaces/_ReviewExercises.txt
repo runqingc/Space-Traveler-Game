@@ -26,12 +26,15 @@ use a map to store the name of the items and the number of that item in stock.
 
 ---------------------
 R9.4 SavingsAccount
-
+inherit: public BankAccount(); public void deposit(double amount); public double getBalance()
+override: public void withdraw(double amount); public void monthEnd()
+add: public void setInterestRate(double rate)
 
 
 ---------------------
 R9.6 Sandwich
-
+a, d is legal
+b, c is illegal because they tried to assign a superclass object to a subclass reference
 
 
 ---------------------
@@ -51,16 +54,72 @@ R9.9 Inheretence -use the UML diagram tool in IntelliJ and indicate to the grade
 
 ---------------------
 R9.10 Casting
-
+Casting Reference Types (Objects):
+Purpose: Adjusts the type of the reference, not the object itself. The actual object in memory remains unchanged.
+Behavior: Allows you to treat an object as an instance of another type within the object's inheritance hierarchy.
+This can be "upcasting" (casting to a superclass) or "downcasting" (casting to a subclass).
+Risks: Downcasting can be dangerous. If the object being cast is not actually an instance of the target type
+(or one of its subclasses), a ClassCastException will be thrown at runtime.
+Casting Primitive Types (Number values):
+Purpose: Converts the value from one primitive type to another, potentially losing information or altering the value.
+Behavior:
+If you're casting from a larger numeric type to a smaller numeric type (e.g., double to int), you risk data loss because the smaller type might not be able to represent the same range or precision.
+If you're casting from a floating-point type to an integral type, the fractional part is truncated (not rounded).
+Casting between char and integral types involves converting the Unicode (or ASCII) value of the character.
+Risks: Information loss, especially when narrowing (e.g., from double to int, where fractional parts are discarded).
+In summary:
+Casting reference types involves changing the way we view an object in terms of its type, without modifying the object itself.
+It's about adjusting the lens through which we see the object.
+Casting primitive types involves actually converting values between different formats, with potential information loss or alteration.
+Both kinds of casting have associated risks and should be used with a clear understanding of their implications.
 
 
 ---------------------
 R9.11 instanceof operator
-
+a. System.out instanceof PrintStream
+True. As mentioned, System.out is an object of the PrintStream class.
+b. System.out instanceof OutputStream
+True. The PrintStream class is a subclass of OutputStream. So, any PrintStream object
+(like System.out) is also an OutputStream object.
+c. System.out instanceof LogStream
+False. The LogStream class is a part of older versions of Java and is deprecated.
+Furthermore, PrintStream does not extend LogStream.
+d. System.out instanceof Object
+True. All Java classes inherit from Object either directly or indirectly. So every Java object is an
+instance of the Object class.
+e. System.out instanceof Closeable
+True. The PrintStream class implements the Closeable interface, which means System.out is also an
+instance of Closeable.
+f. System.out instanceof Writer
+False. The Writer class is an abstract class that is a sibling of OutputStream in the java.io package.
+PrintStream extends OutputStream, not Writer.
 
 
 ---------------------
 R9.14 Edible interface
-
+a. e = sub;
+Legal: sub is of type Sandwich which implements the Edible interface.
+An Edible reference can point to a Sandwich object.
+b. sub = e;
+Not Legal: Without explicit casting, this isn't allowed because e is of type Edible,
+and Java won't assume every Edible is a Sandwich.
+This is especially true since interfaces can be implemented by many classes.
+c. sub = (Sandwich) e;
+Conditionally Legal: This will compile, but at runtime, it will only be successful
+if e actually refers to a Sandwich object. If e refers to any other type implementing
+Edible (not a Sandwich), a ClassCastException will be thrown.
+d. sub = (Sandwich) cerealBox;
+Not Legal: This will compile because of the explicit cast, but it will always result
+in a ClassCastException at runtime because a Rectangle is not and cannot be a Sandwich.
+e. e = cerealBox;
+Not Legal: We can assume from the given information that Rectangle does not implement
+the Edible interface. Therefore, an Edible reference cannot point to a Rectangle object.
+f. e = (Edible) cerealBox;
+Not Legal: Even with casting, this will result in a ClassCastException at runtime because
+a Rectangle is not an Edible.
+g. e = (Rectangle) cerealBox;
+Not Legal: The type of e is Edible. While you can cast cerealBox to its own type,
+Rectangle, the assignment is trying to assign a Rectangle to an Edible reference.
+This is not allowed unless Rectangle implements Edible, which we can assume it doesn't.
 
 
