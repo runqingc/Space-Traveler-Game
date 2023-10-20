@@ -39,16 +39,40 @@ b, c is illegal because they tried to assign a superclass object to a subclass r
 
 ---------------------
 R9.7 Inheretence -use the UML diagram tool in IntelliJ and indicate to the grader where uml file is located
+    Object
+      |
+    Person
+   /      \
+Student   Employee
+            |
+         Instructor
 
 
 
 ---------------------
 R9.8 Inheretence -use the UML diagram tool in IntelliJ and indicate to the grader where uml file is located
+    Vehicle
+   /   |   \
+ Car  Bicycle Motorcycle
+ / \       \
+Truck Sedan Coupe  SportUtilityVehicle
+ |    Minivan
+PickupTruck
 
 
 
 ---------------------
 R9.9 Inheretence -use the UML diagram tool in IntelliJ and indicate to the grader where uml file is located
+     Person
+   /   |   \    \
+Student  Professor Employee   SeminarSpeaker
+       /    |     |    \
+    DepartmentChair  Secretary
+     TeachingAssistant  Janitor
+
+      Course
+   /    |     \
+Seminar Lecture ComputerLab
 
 
 
