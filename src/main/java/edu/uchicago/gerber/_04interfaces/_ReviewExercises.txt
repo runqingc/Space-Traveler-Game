@@ -45,28 +45,14 @@ path: src/main/java/edu/uchicago/gerber/_04interfaces/uml_draft/R9_7/R9_7.uml
 
 ---------------------
 R9.8 Inheretence -use the UML diagram tool in IntelliJ and indicate to the grader where uml file is located
-    Vehicle
-   /   |   \
- Car  Bicycle Motorcycle
- / \       \
-Truck Sedan Coupe  SportUtilityVehicle
- |    Minivan
-PickupTruck
 
+path: src/main/java/edu/uchicago/gerber/_04interfaces/uml_draft/R9_8/diagram
 
 
 ---------------------
 R9.9 Inheretence -use the UML diagram tool in IntelliJ and indicate to the grader where uml file is located
-     Person
-   /   |   \    \
-Student  Professor Employee   SeminarSpeaker
-       /    |     |    \
-    DepartmentChair  Secretary
-     TeachingAssistant  Janitor
 
-      Course
-   /    |     \
-Seminar Lecture ComputerLab
+path: src/main/java/edu/uchicago/gerber/_04interfaces/uml_draft/R9_9/R9_9.uml
 
 
 
