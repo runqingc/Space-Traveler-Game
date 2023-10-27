@@ -38,14 +38,49 @@ Any other component-specific action event occurs for components that support act
 
 -----------------------------------------------------
 R10.11 Inner class and event-listeners
+Inner classes, particularly anonymous inner classes, are frequently used in Java for event listeners
+because they provide a concise and readable way to define and instantiate a listener directly in the
+context where it's needed. They allow for direct access to the instance variables and methods of the
+enclosing class, making it easy to modify the GUI or perform actions based on events without the need
+for extra method calls or parameter passing.
 
-
+However, if Java did not have inner classes, we could still implement event listeners.
+Here are a few alternative approaches:
+1. Separate Top-level Classes: We could define each listener as its own top-level class.
+Each of these classes would need to implement the appropriate listener interface.
+If these listeners need access to instance variables or methods of the main GUI class,
+we would have to pass a reference to the main GUI class to the listener (typically via a constructor).
+2. Use Lambdas (Java 8 and above): With the introduction of lambdas in Java 8,
+event handling can be even more concise for functional interfaces.
 
 -----------------------------------------------------
 R10.14 Object hierarchies
+Method Declared in JTextArea:
+
+append(String str): This method appends the given String to the end of the document of the JTextArea.
+Method that JTextArea Inherits from JTextComponent:
+setSelectedText(String text): This method replaces the currently selected content with the new text.
+Method that JTextArea Inherits from JComponent:
+setToolTipText(String text): This method sets the text that is displayed when the cursor hovers over the component (creating a tooltip).
 
 -----------------------------------------------------
 R10.22 Graphic methods
+We can do the modification in the following way:
+public void drawFlagWithWhiteCenter(Graphics g, int xLeft, int yTop, int width, Color leftColor, Color rightColor){
+    // Draw the left color
+    g.setColor(leftColor);
+    g.fillRect(xLeft, yTop, width/3, width*2/3);
+
+    // Draw the white center
+    g.setColor(Color.WHITE);
+    g.fillRect(xLeft + width/3, yTop, width/3, width*2/3);
+
+    // Draw the right color
+    g.setColor(rightColor);
+    g.fillRect(xLeft + 2*width/3, yTop, width/3, width*2/3);
+}
+
+
 
 -----------------------------------------------------
 R11.2 Layout managers
