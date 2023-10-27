@@ -27,29 +27,5 @@ public class OlympicComponent extends JComponent {
 
     }
 
-    public void drawOlympic(Graphics g, int xLeft, int yTop, int radius){
-
-        g.setColor(Color.BLUE);
-        g.drawOval(xLeft, yTop, radius*2, radius*2);
-//        g.setColor(Color.WHITE);
-//        g.drawOval(xLeft+radius/10, yTop+radius/10, radius*18/10, radius*18/10);
-        g.setColor(Color.BLACK);
-        g.drawOval(xLeft+radius*2, yTop, radius*2, radius*2);
-//        g.setColor(Color.WHITE);
-//        g.drawOval(xLeft+radius/10+radius*2, yTop+radius/10, radius*18/10, radius*18/10);
-        g.setColor(Color.RED);
-        g.drawOval(xLeft+radius*4, yTop, radius*2, radius*2);
-//        g.setColor(Color.WHITE);
-//        g.drawOval(xLeft+radius/10+radius*4, yTop+radius/10, radius*18/10, radius*18/10);
-        g.setColor(Color.YELLOW);
-        g.drawOval(xLeft+radius, yTop+radius, radius*2, radius*2);
-//        g.setColor(Color.WHITE);
-//        g.drawOval(xLeft+radius+radius/10, yTop+radius+radius/10, radius*18/10, radius*18/10);
-        g.setColor(Color.GREEN);
-        g.drawOval(xLeft+radius+2*radius, yTop+radius, radius*2, radius*2);
-//        g.setColor(Color.WHITE);
-//        g.drawOval(xLeft+radius+radius/10+2*radius, yTop+radius+radius/10, radius*18/10, radius*18/10);
-
-    }
 
 }

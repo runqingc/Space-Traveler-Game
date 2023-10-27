@@ -1,20 +1,25 @@
-package P10_10;
+package P10_5;
+
 
 import javax.swing.*;
 
-public class OlympicViewer {
+public class HouseViewer {
 
     public static void main(String[] args){
 
         JFrame frame = new JFrame();
-        frame.setSize(600, 400);
+        frame.setSize(700, 400);
 
-        frame.setTitle("Olympic Flag");
+        frame.setTitle("My Lovely House");
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JComponent component = new OlympicComponent();
+        JComponent component = new HouseComponent();
         frame.add(component);
         frame.setVisible(true);
 
+
+
     }
+
+
 }
