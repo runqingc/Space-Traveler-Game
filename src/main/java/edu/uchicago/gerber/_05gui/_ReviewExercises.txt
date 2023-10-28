@@ -84,23 +84,78 @@ public void drawFlagWithWhiteCenter(Graphics g, int xLeft, int yTop, int width, 
 
 -----------------------------------------------------
 R11.2 Layout managers
+Using a layout manager in Java's Swing framework offers several advantages over absolute positioning
+(i.e., specifying exact x, y coordinates for each component):
 
+Platform Independence: The same GUI might look or behave differently on various platforms.
+Layout managers ensure consistent layouts across different platforms, screen resolutions, and
+look-and-feel settings.
+
+Adaptability to Window Resizing: With layout managers, when a user resizes a window, components can
+adjust their sizes and positions accordingly. In contrast, components positioned with absolute
+coordinates don't adapt to window resizing, which can lead to a broken or inefficient use of space
+in the UI.
 
 -----------------------------------------------------
 R11.11 ButtonGroup
-
+The behavior and intended use of radio buttons and checkboxes dictate the need for a ButtonGroup
+for radio buttons but not for checkboxes.
+Radio Buttons: They are used when you want to provide a set of options where the user can select only one option.
+Radio buttons within a group are mutually exclusive, meaning if one is selected, all others are automatically deselected.
+ButtonGroup ensures this mutual exclusivity.
+Checkboxes: They are used when you want to provide a set of options where the user can select multiple options
+at the same time. There's no mutual exclusivity enforced among checkboxes.
 
 -----------------------------------------------------
 R11.19 Types of Events
-
+Both ActionEvent and MouseEvent are subclasses of the java.awt.event.AWTEvent class and are part of the Java event model,
+but they represent different user interactions and are used in different contexts.
+ActionEvent: Represents a high-level, semantic event, typically triggered by user interaction with a GUI component.
+Examples include clicking a button, selecting an item from a list, or choosing a menu item.
+MouseEvent: Represents a low-level, input-based event related specifically to mouse actions.
+Examples include mouse clicks, mouse movement, mouse entering a component, and mouse exiting a component.
 
 -----------------------------------------------------
 R11.20 Events
+ActionEvent:
+Command String: An ActionEvent has an associated command string, which can be retrieved with the getActionCommand() method.
+For example, if a button triggers the event, the command string might be the text displayed on the button.
+Source Object: Like all event objects, an ActionEvent contains a reference to the object (component) that generated the event.
+You can get this with the getSource() method.
+Modifiers: Using the getModifiers() method, you can determine which, if any, modifier keys (like SHIFT, CTRL, ALT) were pressed
+during the action.
 
-
+MouseEvent:
+In addition to the standard event attributes like the source object and ID, a MouseEvent carries more detailed information about the mouse
+interaction:
+Coordinates: The x and y coordinates of the mouse cursor at the time of the event, relative to the source component.
+These can be retrieved using the getX() and getY() methods, respectively.
+Button: Information about which mouse button was pressed or released. Methods like getButton() will tell you if it was the
+left (MouseEvent.BUTTON1), middle (MouseEvent.BUTTON2), or right (MouseEvent.BUTTON3) button.
+Click Count: The number of mouse clicks associated with the event. This can be retrieved using the getClickCount() method.
+Modifiers: Much like the ActionEvent, you can determine which modifier keys were pressed (or other mouse buttons) using
+the getModifiersEx() method. This gives detailed information, letting you know, for instance, if the SHIFT key was pressed
+or if the right button was down.
 
 -----------------------------------------------------
 R11.21 ActionListener versus MouseListener
+
+Purpose of ActionListener:
+The ActionListener interface is designed to handle high-level, semantic actions. These are abstract actions like "submit", "cancel",
+"open", etc., and don't delve into the specifics of how the action was triggered.
+The main event it deals with is when a user interacts with a control in a manner that suggests they are committing to an action,
+such as clicking a button or hitting the enter key in a text field. Given this high-level nature, one method (actionPerformed) is
+sufficient to capture this singular, abstract idea of an action being performed.
+
+Purpose of MouseListener:
+The MouseListener interface is designed to handle low-level, detailed mouse interactions. Mouse interactions can be nuanced,
+with various types of events like clicking, pressing, releasing, entering a component, or exiting a component.
+Each type of interaction with the mouse might be of interest in GUI programming. For example, you might want to show a
+tooltip when the mouse enters a component, begin a drag action when the mouse is pressed, or trigger some function when the
+mouse is clicked. The specificity and granularity of mouse interactions necessitate multiple methods to accurately capture
+ all possible events.
+
+
 
 
 
