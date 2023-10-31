@@ -2,7 +2,111 @@
 # Use this file to answer Review Exercises from the Big Java textbook
 #########################################################################
 
+-------------------------------------------------------------------------
+R12.1 OO Analysis and Design
+1. Recognize how to discover classes and their responsibilities.
+2. Categorize class relationships and produce UML diagrams that describe them.
+3. Apply an object-oriented development process to designing a program.
 
+
+-------------------------------------------------------------------------
+R12.2 OO Analysis and Design
+Rule of Thumb: Consider nouns in the problem domain.
+Problem Statement Analysis: Read through the requirements or problem statement. Underline or highlight nouns and noun
+phrases. These often represent potential classes.
+Granularity: Not every noun becomes a class. Filter out based on significance to the problem. For example, in a
+banking system, "Account" might be a class while "Paper" might not.
+Grouping & Abstraction: Group related nouns together. If several nouns seem to be related, they might belong to the
+same class or be part of a hierarchy. For instance, "Savings Account" and "Checking Account" can both be subclasses
+of "Account".
+External Interactions: Consider external systems or entities that the system interacts with. These might also be
+represented as classes, even if they're outside the system (e.g., "PaymentGateway").
+
+
+
+-------------------------------------------------------------------------
+R12.3 OO Analysis and Design
+Finding Methods:
+Rule of Thumb: Consider verbs or actions associated with the identified classes.
+Problem Statement Analysis: Read through the requirements or problem statement again. This time, underline or
+highlight verbs and verb phrases. These often represent potential methods or operations.
+Class-Action Association: Associate the identified actions with the classes they operate on or are most closely related to. For example, "deposit" and "withdraw" are actions associated with the "Account" class.
+CRUD Operations: For many classes, especially those representing entities in a system, consider if you'll need basic
+CRUD (Create, Read, Update, Delete) operations as methods.
+Consistency & Completeness: Ensure that the methods identified cover all the required functionalities and are
+consistent with the responsibilities of the class. It's important that a class doesn't become a "god object" with too
+many responsibilities, and that each method clearly aligns with the class's purpose.
+Remember, these rules of thumb are starting points. As you gain experience and delve deeper into object-oriented
+design principles and patterns, you'll refine your intuition for identifying classes and methods. Always be open to
+revisiting and refactoring your design as you understand the problem better.
+
+
+-------------------------------------------------------------------------
+R12.8 Relationships
+----------------------------------------
+|              Coin                    |
+----------------------------------------
+| Responsibilities        | Collaborators|
+|-------------------------|--------------|
+| Know its value          |              |
+----------------------------------------
+
+-----------------------------------------------------
+|                CashRegister                       |
+-----------------------------------------------------
+| Responsibilities                  | Collaborators  |
+|----------------------------------|----------------|
+| Hold coins                       | Coin           |
+| Compute total value of coins     | Coin           |
+| Enter payment with coins details |                |
+-----------------------------------------------------
+
+
+-------------------------------------------------------------------------
+R12.9 CRC Quiz
+Class: Quiz
+Responsibility:
+Store a list of Question objects.
+Track the current question index.
+Provide the next question.
+Record user's answers.
+Calculate the score or percentage correct.
+Reset the quiz (go back to the first question).
+Collaborator:
+
+Question
+Class: Question
+Responsibility:
+Store the question text.
+Store possible answer choices.
+Store the correct answer.
+Check if a given answer is correct.
+Optionally, provide feedback or explanation for the answer.
+Collaborator:
+Quiz
+
+
+-------------------------------------------------------------------------
+R12.10 UML Quiz
+
+
+
+-------------------------------------------------------------------------
+R12.11 CRC Cards
+
+
+
+-------------------------------------------------------------------------
+R12.13 UML Diagram
+
+
+
+-------------------------------------------------------------------------
+R12.14 UML Diagram
+
+
+-------------------------------------------------------------------------
+R12.15 ULM Diagram
 
 
 
