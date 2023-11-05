@@ -88,26 +88,164 @@ Quiz
 
 -------------------------------------------------------------------------
 R12.10 UML Quiz
-
+src/main/java/edu/uchicago/gerber/_06design/uml_draft
 
 
 -------------------------------------------------------------------------
 R12.11 CRC Cards
+1.
+    classes:
+        Country:
+            String getName();
+            double getArea();
+            long getPopulation();
+            double getPopulationDensity();
+        CountryStatistics:
+            void readCountries(String filename);
+            Country getLargestAreaCountry();
+            Country getLargestPopulationCountry();
+            Country getLargestPopulationDensityCountry();
 
+2.
+    CRC cards:
+
+    ---------------------------------------------------------------------------------
+    -                                    Country                                    -
+    ---------------------------------------------------------------------------------
+    - get the country's name                -                   None                -
+    - get the country's area                -                   None                -
+    - get the country's population          -                   None                -
+    - get the country's population density  -                   None                -
+    ---------------------------------------------------------------------------------
+
+    ---------------------------------------------------------------------------------
+    -                               CountryStatistics                               -
+    ---------------------------------------------------------------------------------
+    - read all countries from the file                     -           None         -
+    - get the country with the largest area                -          Country       -
+    - get the country with the largest population          -          Country       -
+    - get the country with the largest population density  -          Country       -
+    ---------------------------------------------------------------------------------
+
+3.
+
+    The UML diagram is located under "_06design/R12_11/R12.11.puml".
+
+4.
+
+    javadoc documents:
+
+    public class Country {
+        private String name;
+        private long population;
+        private double area;
+
+        /**
+         * Construct a Country with a name, population and area.
+         * @param name The name of the Country.
+         * @param population The population of the Country.
+         * @param area The area of the Country.
+         */
+        public Country(String name, long population, double area) {
+            // implementation
+        }
+
+        /**
+         * Returns the name of the Country.
+         * @return the name of the Country.
+         */
+        public String getName() {
+            // implementation
+        }
+
+        /**
+         * Returns the area of the Country.
+         * @return the are of the Country.
+         */
+        public double getArea() {
+            // implementation
+        }
+
+        /**
+         * Returns the population of the Country.
+         * @return the population of the Country.
+         */
+        public long getPopulation() {
+            // implementation
+        }
+
+        /**
+         * Calculates and returns the population density of the Country.
+         * @return the population density of the Country.
+         */
+        public double getPopulationDensity() {
+            // implementation
+        }
+    }
+
+
+    public class CountryStatistics {
+        private ArrayList<Country> countries;
+        /**
+         * Read countries from given filename and stores them.
+         * @param filename The filename to read countries.
+         */
+        public void readFromFile(String filename) {
+            // implementation
+        }
+
+        /**
+         * Finds and returns the Country with the largest area.
+         * @return the Country with the largest area.
+         */
+        public Country getLargestAreaCountry() {
+            // implementation
+        }
+
+        /**
+         * Finds and returns the Country with the largest population.
+         * @return the Country with the largest population.
+         */
+        public Country getLargestPopulationCountry() {
+            // implementation
+        }
+
+        /**
+         * Finds and returns the Country with the largest population density.
+         * @return the Country with the largest population density.
+         */
+        public Country getLargestPopulationDensityCountry() {
+            // implementation
+        }
+
+    }
 
 
 -------------------------------------------------------------------------
 R12.13 UML Diagram
-
+src/main/java/edu/uchicago/gerber/_06design/uml_draft
 
 
 -------------------------------------------------------------------------
 R12.14 UML Diagram
 
+I would use these classes:
+
+    Employee:
+        Represent a specific employee.
+        Stores the name, hourly rate, employee ID.
+
+        calculates pay given on hourly worked in every 2 weeks period.
+
+    PayrollProcessor:
+        Manager and process payrolls for all employees.
+
+        generates the total pay for all employees including overtime work.
+        generates a report for all employees.
 
 -------------------------------------------------------------------------
 R12.15 ULM Diagram
-
+src/main/java/edu/uchicago/gerber/_06design/uml_draft
 
 
 
