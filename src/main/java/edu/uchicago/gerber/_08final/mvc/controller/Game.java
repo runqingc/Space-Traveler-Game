@@ -11,6 +11,8 @@ import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.Random;
 
+import static java.awt.Event.DOWN;
+
 
 // ===============================================
 // == This Game class is the CONTROLLER
@@ -38,9 +40,10 @@ public class Game implements Runnable, KeyListener {
     private static final int
             PAUSE = 80, // p key
             QUIT = 81, // q key
-            LEFT = 37, // rotate left; left arrow
-            RIGHT = 39, // rotate right; right arrow
-            UP = 38, // thrust; up arrow
+            LEFT = 37, // move left; left arrow
+            RIGHT = 39, // move right; right arrow
+            UP = 38, // move up; up arrow
+            DOWN = 40, // move down; down arrow
             START = 83, // s key
             FIRE = 32, // space key
             MUTE = 77, // m-key mute
@@ -94,9 +97,29 @@ public class Game implements Runnable, KeyListener {
 
         // and get the current time
         long startTime = System.currentTimeMillis();
+        long lastAsteroidSpawnTime = startTime;
+        long lastFireTime = startTime;
 
         // this thread animates the scene
         while (Thread.currentThread() == animationThread) {
+
+            long currentTime = System.currentTimeMillis();
+
+            // Enqueue a new Asteroid every 8 seconds (8000 milliseconds)
+            if (currentTime - lastAsteroidSpawnTime >= 8000) {
+                CommandCenter.getInstance().getOpsQueue().enqueue(new Asteroid(0), GameOp.Action.ADD);
+                lastAsteroidSpawnTime = currentTime; // Reset the last spawn time
+            }
+
+            // Auto fire for every 0.5 seconds
+            if(currentTime-lastFireTime>=500){
+                synchronized (this){
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new Bullet(CommandCenter.getInstance().getFalcon()), GameOp.Action.ADD);
+                }
+                Sound.playSound("thump.wav");
+                lastFireTime = currentTime;
+            }
+
 
 
             //this call will cause all movables to move() and draw() themselves every ~40ms
@@ -410,8 +433,12 @@ public class Game implements Runnable, KeyListener {
                 System.exit(0);
                 break;
             case UP:
-                falcon.setThrusting(true);
-                soundThrust.loop(Clip.LOOP_CONTINUOUSLY);
+                falcon.setTurnState(Falcon.TurnState.UP);
+//                falcon.setThrusting(true);
+//                soundThrust.loop(Clip.LOOP_CONTINUOUSLY);
+                break;
+            case DOWN:
+                falcon.setTurnState(Falcon.TurnState.DOWN);
                 break;
             case LEFT:
                 falcon.setTurnState(Falcon.TurnState.LEFT);
@@ -463,12 +490,14 @@ public class Game implements Runnable, KeyListener {
             //releasing either the LEFT or RIGHT arrow key will set the TurnState to IDLE
             case LEFT:
             case RIGHT:
+            case UP:
+            case DOWN:
                 falcon.setTurnState(Falcon.TurnState.IDLE);
                 break;
-            case UP:
-                falcon.setThrusting(false);
-                soundThrust.stop();
-                break;
+
+//                falcon.setThrusting(false);
+//                soundThrust.stop();
+//                break;
 
             case MUTE:
                 CommandCenter.getInstance().setMuted(!CommandCenter.getInstance().isMuted());

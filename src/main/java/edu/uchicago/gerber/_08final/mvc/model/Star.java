@@ -52,6 +52,7 @@ public class Star implements Movable{
     @Override
     public void move() {
         //do nothing
+
     }
 
 }

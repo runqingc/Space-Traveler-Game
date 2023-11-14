@@ -91,7 +91,7 @@ public class CommandCenter {
 		falcon.setShield(Falcon.INITIAL_SPAWN_TIME);
 		falcon.setInvisible(Falcon.INITIAL_SPAWN_TIME/4);
 		//put falcon in the middle of the game-space
-		falcon.setCenter(new Point(Game.DIM.width / 2, Game.DIM.height / 2));
+		falcon.setCenter(new Point(Game.DIM.width / 2, Game.DIM.height / 5 *4));
 		//random number between 0-360 in steps of TURN_STEP
 		falcon.setOrientation(Game.R.nextInt(360 / Falcon.TURN_STEP) * Falcon.TURN_STEP);
 		falcon.setDeltaX(0);

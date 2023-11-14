@@ -38,11 +38,14 @@ public class Bullet extends Sprite {
         setDeltaX(falcon.getDeltaX() + vectorX);
         setDeltaY(falcon.getDeltaY() + vectorY);
 
+
+        // I commented this out so that the falcon will not have a force back when it fires
+
         //we have a reference to the falcon passed into the constructor. Let's create some kick-back.
         //fire kick-back on the falcon: inertia - fire-vector / some arbitrary divisor
-        final double KICK_BACK_DIVISOR = 36.0;
-        falcon.setDeltaX(falcon.getDeltaX() - vectorX / KICK_BACK_DIVISOR);
-        falcon.setDeltaY(falcon.getDeltaY() - vectorY / KICK_BACK_DIVISOR);
+//        final double KICK_BACK_DIVISOR = 36.0;
+//        falcon.setDeltaX(falcon.getDeltaX() - vectorX / KICK_BACK_DIVISOR);
+//        falcon.setDeltaY(falcon.getDeltaY() - vectorY / KICK_BACK_DIVISOR);
 
 
         //define the points on a cartesian grid

@@ -50,7 +50,7 @@ public class Falcon extends Sprite {
 	private int showLevel;
 	private boolean thrusting;
 	//enum used for turnState field
-	public enum TurnState {IDLE, LEFT, RIGHT}
+	public enum TurnState {IDLE, LEFT, RIGHT, UP, DOWN}
 	private TurnState turnState = TurnState.IDLE;
 
 
@@ -103,51 +103,92 @@ public class Falcon extends Sprite {
 		final double THRUST = 0.85;
 		final int MAX_VELOCITY = 39;
 
+		final int MY_SLOW_VELOCITY = 1;
 
-		//apply some thrust vectors using trig.
-		if (thrusting) {
-			double vectorX = Math.cos(Math.toRadians(getOrientation()))
-					* THRUST;
-			double vectorY = Math.sin(Math.toRadians(getOrientation()))
-					* THRUST;
+		// I want to create my own moving logic here, which is simple:
 
-			//Absolute velocity is the hypotenuse of deltaX and deltaY
-			int absVelocity =
-					(int) Math.sqrt(Math.pow(getDeltaX()+ vectorX, 2) + Math.pow(getDeltaY() + vectorY, 2));
+		// the head of the plane will always face up
+		setOrientation(270);
 
-			//only accelerate (or adjust radius) if we are below the maximum absVelocity.
-			if (absVelocity < MAX_VELOCITY){
-				//accelerate
-				setDeltaX(getDeltaX() + vectorX);
-				setDeltaY(getDeltaY() + vectorY);
-				//Make the ship radius bigger when the absolute velocity increases, thereby increasing difficulty when not
-				// protected, and allowing player to use the shield offensively when protected.
-				setRadius(MIN_RADIUS + absVelocity / 3);
-				maxSpeedAttained = false;
-			} else {
-				//at max speed, you will lose steerage if you attempt to accelerate in the same general direction
-				//show WARNING message to player using this flag (see drawFalconStatus() of GamePanel class)
-				maxSpeedAttained = true;
-			}
+		// use up, down, left, right to control the movement of the plane, firing will not make the plane backward
 
-		}
 
-		//adjust the orientation given turnState
-		int adjustOr = getOrientation();
 		switch (turnState){
 			case LEFT:
-				adjustOr = getOrientation() <= 0 ? 360 - TURN_STEP : getOrientation() - TURN_STEP;
+				setDeltaX(getDeltaX() - MY_SLOW_VELOCITY);
 				break;
 			case RIGHT:
-				adjustOr = getOrientation() >= 360 ? TURN_STEP : getOrientation() + TURN_STEP;
+				setDeltaX(getDeltaX() + MY_SLOW_VELOCITY);
+				break;
+			case UP:
+				setDeltaY(getDeltaY() - MY_SLOW_VELOCITY);
+				break;
+			case DOWN:
+				setDeltaY(getDeltaY() + MY_SLOW_VELOCITY);
 				break;
 			case IDLE:
+				setDeltaX(0);
+				setDeltaY(0);
 			default:
 				//do nothing
+				break;
 		}
-		setOrientation(adjustOr);
+
+
+
+
+
+//		//apply some thrust vectors using trig.
+//		if (thrusting) {
+//			double vectorX = Math.cos(Math.toRadians(getOrientation()))
+//					* THRUST;
+//			double vectorY = Math.sin(Math.toRadians(getOrientation()))
+//					* THRUST;
+//
+//			//Absolute velocity is the hypotenuse of deltaX and deltaY
+//			int absVelocity =
+//					(int) Math.sqrt(Math.pow(getDeltaX()+ vectorX, 2) + Math.pow(getDeltaY() + vectorY, 2));
+//
+//			//only accelerate (or adjust radius) if we are below the maximum absVelocity.
+//			if (absVelocity < MAX_VELOCITY){
+//				//accelerate
+//				setDeltaX(getDeltaX() + vectorX);
+//				setDeltaY(getDeltaY() + vectorY);
+//				//Make the ship radius bigger when the absolute velocity increases, thereby increasing difficulty when not
+//				// protected, and allowing player to use the shield offensively when protected.
+//				setRadius(MIN_RADIUS + absVelocity / 3);
+//				maxSpeedAttained = false;
+//			} else {
+//				//at max speed, you will lose steerage if you attempt to accelerate in the same general direction
+//				//show WARNING message to player using this flag (see drawFalconStatus() of GamePanel class)
+//				maxSpeedAttained = true;
+//			}
+//
+//		}
+//
+//		//adjust the orientation given turnState
+//		int adjustOr = getOrientation();
+//		switch (turnState){
+//			case LEFT:
+//				adjustOr = getOrientation() <= 0 ? 360 - TURN_STEP : getOrientation() - TURN_STEP;
+//				break;
+//			case RIGHT:
+//				adjustOr = getOrientation() >= 360 ? TURN_STEP : getOrientation() + TURN_STEP;
+//				break;
+//			case IDLE:
+//			default:
+//				//do nothing
+//		}
+//		setOrientation(adjustOr);
 
 	}
+
+
+
+
+
+
+
 
 	//Since the superclass Spite does not provide an
 	// implementation for draw() (contract method from Movable) ,we inherit that contract debt, and therefore must

@@ -18,6 +18,9 @@ public class Asteroid extends Sprite {
 	//size determines if the Asteroid is Large (0), Medium (1), or Small (2)
 	public Asteroid(int size){
 
+		// my modification: always place the new asteroid at the top of the screen
+		setCenter(new Point(Game.R.nextInt(Game.DIM.width), 0));
+
 		//a size of zero is a big asteroid
 		//a size of 1 or 2 is med or small asteroid respectively. See getSize() method.
 		if (size == 0) setRadius(LARGE_RADIUS);
