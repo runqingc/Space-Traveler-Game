@@ -120,10 +120,14 @@ public class Game implements Runnable, KeyListener {
             if(currentTime-lastFireTime>=500){
                 synchronized (this){
                     CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.MIDDLE), GameOp.Action.ADD);
-                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT_WING), GameOp.Action.ADD);
-                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RIGHT_WING), GameOp.Action.ADD);
-                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RIGHT), GameOp.Action.ADD);
-                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT), GameOp.Action.ADD);
+                    if(CommandCenter.getInstance().getFalcon().getLaserLevel()>=2){
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT_WING), GameOp.Action.ADD);
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RIGHT_WING), GameOp.Action.ADD);
+                    }
+                    if(CommandCenter.getInstance().getFalcon().getLaserLevel()>=3){
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RIGHT), GameOp.Action.ADD);
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT), GameOp.Action.ADD);
+                    }
                 }
                 Sound.playSound("laser.wav");
                 lastFireTime = currentTime;
@@ -165,6 +169,7 @@ public class Game implements Runnable, KeyListener {
 //        spawnNewWallFloater();
         spawnShieldFloater();
 //        spawnNukeFloater();
+        spawnBoltFloater();
     }
 
 
@@ -232,6 +237,10 @@ public class Game implements Runnable, KeyListener {
                         Sound.playSound("nuke-up.wav");
                         CommandCenter.getInstance().getFalcon().setNukeMeter(Falcon.MAX_NUKE);
                         break;
+                    case "BoltFloater":
+                        // haven't chosen sound yet
+                        CommandCenter.getInstance().getFalcon().setLaserLevel(CommandCenter.getInstance().getFalcon().getLaserLevel()+1);
+
                 }
                 CommandCenter.getInstance().getOpsQueue().enqueue(movFloater, GameOp.Action.REMOVE);
 
@@ -331,6 +340,13 @@ public class Game implements Runnable, KeyListener {
 
         if (CommandCenter.getInstance().getFrame() % ShieldFloater.SPAWN_SHIELD_FLOATER == 0) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new ShieldFloater(), GameOp.Action.ADD);
+        }
+    }
+
+    private void spawnBoltFloater() {
+
+        if (CommandCenter.getInstance().getFrame() % BoltFloater.SPAWN_BOLT_FLOATER == 0 && CommandCenter.getInstance().getFalcon().getLaserLevel()<3) {
+            CommandCenter.getInstance().getOpsQueue().enqueue(new BoltFloater(), GameOp.Action.ADD);
         }
     }
 

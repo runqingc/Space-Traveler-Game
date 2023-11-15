@@ -92,6 +92,9 @@ public class CommandCenter {
 		Sound.playSound("shipspawn.wav");
 //		falcon.setShield(Falcon.INITIAL_SPAWN_TIME);
 		falcon.setInvisible(Falcon.INITIAL_SPAWN_TIME/4);
+		// set initial laser level
+		falcon.setLaserLevel(1);
+
 		CommandCenter.getInstance().getOpsQueue().enqueue(new Shield2(CommandCenter.getInstance().getFalcon()), GameOp.Action.ADD);
 		//put falcon in the middle of the game-space
 		falcon.setCenter(new Point(Game.DIM.width / 2, Game.DIM.height / 5 *4));
