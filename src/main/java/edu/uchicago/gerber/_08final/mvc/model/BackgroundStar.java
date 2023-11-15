@@ -16,7 +16,7 @@ public class BackgroundStar extends Sprite{
     public BackgroundStar(){
 
         // star is DEBRIS, do not interact
-        setTeam(Team.DEBRIS);
+        setTeam(Team.BACKGROUND);
         setRadius(10);
         int bright = Game.R.nextInt(223); //Stars are muted at max brightness of 225 out of 255
         color = new Color(bright, bright, bright); //some grey value

@@ -13,6 +13,8 @@ public class LaserBlue extends Sprite{
 
     private int index = 0;
 
+    public final int DAMAGE = 20;
+
     // where does the laser shoot from
     public enum LaserType {
         MIDDLE,

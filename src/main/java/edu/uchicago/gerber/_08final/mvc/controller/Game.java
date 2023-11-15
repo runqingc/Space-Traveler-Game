@@ -208,12 +208,24 @@ public class Game implements Runnable, KeyListener {
                     if (!movFriend.isProtected()) {
                         CommandCenter.getInstance().getOpsQueue().enqueue(movFriend, GameOp.Action.REMOVE);
                         if(movFriend instanceof LaserBlue){
-                            CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlueDebris((Sprite) movFoe), GameOp.Action.ADD);
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlueDebris((Sprite) movFriend), GameOp.Action.ADD);
                         }
                     }
 
-                    //remove the foe
-                    CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
+                    //remove the foe on some occasion
+                    if((movFriend instanceof LaserBlue) && (movFoe instanceof EnemyShip)){
+                        EnemyShip movFoe1 = (EnemyShip) movFoe;
+                        LaserBlue laserBlue = (LaserBlue) movFriend;
+                        movFoe1.health -= laserBlue.DAMAGE;
+                        if(movFoe1.health<=0){
+                            CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
+                        }
+                    }else{
+                        CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
+                    }
+
+
+
 
                     if (movFoe instanceof Brick) {
                         CommandCenter.getInstance().setScore(CommandCenter.getInstance().getScore() + 1000);
@@ -328,7 +340,13 @@ public class Game implements Runnable, KeyListener {
                         CommandCenter.getInstance().getMovDebris().remove(mov);
                     }
                     break;
-
+                case BACKGROUND:
+                    if (action == GameOp.Action.ADD) {
+                        CommandCenter.getInstance().getMovBackgrounds().add(mov);
+                    } else { //GameOp.Operation.REMOVE
+                        CommandCenter.getInstance().getMovBackgrounds().remove(mov);
+                    }
+                    break;
 
             }
 
@@ -449,7 +467,9 @@ public class Game implements Runnable, KeyListener {
             //bump the level up
             level = level + 1;
             CommandCenter.getInstance().setLevel(level);
+
             //spawn some big new asteroids
+
             spawnBigAsteroids(level);
             //make falcon invincible momentarily in case new asteroids spawn on top of him, and give player
             //time to adjust to new asteroids in game space.

@@ -31,6 +31,7 @@ public class CommandCenter {
 	private final Falcon falcon  = new Falcon();
 
 	//lists containing our movables subdivided by team
+	private final List<Movable> movBackgrounds = new LinkedList<>();
 	private final List<Movable> movDebris = new LinkedList<>();
 	private final List<Movable> movFriends = new LinkedList<>();
 	private final List<Movable> movFoes = new LinkedList<>();
@@ -113,6 +114,7 @@ public class CommandCenter {
 	}
 
 	private void clearAll(){
+		movBackgrounds.clear();
 		movDebris.clear();
 		movFriends.clear();
 		movFoes.clear();

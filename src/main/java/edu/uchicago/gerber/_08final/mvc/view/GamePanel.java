@@ -198,10 +198,12 @@ public class GamePanel extends Panel {
 
 
             moveDrawMovables(grpOff,
-                    CommandCenter.getInstance().getMovDebris(),
+                    CommandCenter.getInstance().getMovBackgrounds(),
                     CommandCenter.getInstance().getMovFloaters(),
                     CommandCenter.getInstance().getMovFoes(),
-                    CommandCenter.getInstance().getMovFriends());
+                    CommandCenter.getInstance().getMovFriends(),
+                    CommandCenter.getInstance().getMovDebris()
+                    );
 
 
             drawNumberShipsRemaining(grpOff);
