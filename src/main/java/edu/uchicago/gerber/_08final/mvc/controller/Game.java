@@ -105,6 +105,10 @@ public class Game implements Runnable, KeyListener {
         while (Thread.currentThread() == animationThread) {
 
             long currentTime = System.currentTimeMillis();
+            if(currentTime%8000<40){
+                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack3(), GameOp.Action.ADD);
+            }
+
 
             // Enqueue a new Asteroid every 8 seconds (8000 milliseconds)
             if (currentTime - lastAsteroidSpawnTime >= 8000) {
@@ -115,7 +119,7 @@ public class Game implements Runnable, KeyListener {
             // Auto fire for every 0.5 seconds
             if(currentTime-lastFireTime>=500){
                 synchronized (this){
-                    CommandCenter.getInstance().getOpsQueue().enqueue(new Bullet(CommandCenter.getInstance().getFalcon()), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), 3), GameOp.Action.ADD);
                 }
                 Sound.playSound("thump.wav");
                 lastFireTime = currentTime;
@@ -211,7 +215,8 @@ public class Game implements Runnable, KeyListener {
                 switch (clazz.getSimpleName()) {
                     case "ShieldFloater":
                         Sound.playSound("shieldup.wav");
-                        CommandCenter.getInstance().getFalcon().setShield(Falcon.MAX_SHIELD);
+//                        CommandCenter.getInstance().getFalcon().setShield(Falcon.MAX_SHIELD);
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new Shield2(CommandCenter.getInstance().getFalcon()), GameOp.Action.ADD);
                         break;
                     case "NewWallFloater":
                         Sound.playSound("insect.wav");
@@ -397,7 +402,7 @@ public class Game implements Runnable, KeyListener {
             spawnBigAsteroids(level);
             //make falcon invincible momentarily in case new asteroids spawn on top of him, and give player
             //time to adjust to new asteroids in game space.
-            CommandCenter.getInstance().getFalcon().setShield(Falcon.INITIAL_SPAWN_TIME);
+//            CommandCenter.getInstance().getFalcon().setShield(Falcon.INITIAL_SPAWN_TIME);
             //show "Level X" in middle of screen
             CommandCenter.getInstance().getFalcon().setShowLevel(Falcon.INITIAL_SPAWN_TIME);
 

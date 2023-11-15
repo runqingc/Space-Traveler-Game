@@ -18,12 +18,14 @@ public class Falcon extends Sprite {
 	//number of degrees the falcon will turn at each animation cycle if the turnState is LEFT or RIGHT
 	public final static int TURN_STEP = 11;
 	//number of frames that the falcon will be protected after a spawn
-	public static final int INITIAL_SPAWN_TIME = 46;
+	public static final int INITIAL_SPAWN_TIME = 1;
 	//number of frames falcon will be protected after consuming a NewShieldFloater
-	public static final int MAX_SHIELD = 200;
+//	public static final int MAX_SHIELD = 200;
 	public static final int MAX_NUKE = 600;
 
 	public static final int MIN_RADIUS = 28;
+
+	boolean isProtected = false;
 
 
 	//images states
@@ -70,10 +72,10 @@ public class Falcon extends Sprite {
 		//Using enums as keys is safer b/c we know the value exists when we reference the consts later in code.
     	Map<ImageState, BufferedImage> rasterMap = new HashMap<>();
 		rasterMap.put(ImageState.FALCON_INVISIBLE, null );
-		rasterMap.put(ImageState.FALCON, loadGraphic("/imgs/fal/falcon125.png") ); //normal ship
-		rasterMap.put(ImageState.FALCON_THR, loadGraphic("/imgs/fal/falcon125_thr.png") ); //normal ship thrusting
-		rasterMap.put(ImageState.FALCON_PRO, loadGraphic("/imgs/fal/falcon125_PRO.png") ); //protected ship (green)
-		rasterMap.put(ImageState.FALCON_PRO_THR, loadGraphic("/imgs/fal/falcon125_PRO_thr.png") ); //green thrusting
+		rasterMap.put(ImageState.FALCON, loadGraphic("/imgs/playerShip/playerShip1_blue.png") ); //normal ship
+		rasterMap.put(ImageState.FALCON_THR, loadGraphic("/imgs/playerShip/playerShip1_blue.png") ); //normal ship thrusting
+		rasterMap.put(ImageState.FALCON_PRO, loadGraphic("/imgs/playerShip/playerShip1_blue.png") ); //protected ship (green)
+		rasterMap.put(ImageState.FALCON_PRO_THR, loadGraphic("/imgs/playerShip/playerShip1_blue.png") ); //green thrusting
 
 		setRasterMap(rasterMap);
 
@@ -82,7 +84,7 @@ public class Falcon extends Sprite {
 
 	@Override
 	public boolean isProtected() {
-		return  shield > 0;
+		return  false;
 
 	}
 
@@ -94,7 +96,7 @@ public class Falcon extends Sprite {
 		super.move();
 
 		if (invisible > 0) invisible--;
-		if (shield > 0) shield--;
+//		if (shield > 0) shield--;
 		if (nukeMeter > 0) nukeMeter--;
 		//The falcon is a convenient place to decrement the showLevel variable as the falcon
 		//move() method is being called every frame (~40ms); and the falcon reference is never null.
@@ -103,7 +105,7 @@ public class Falcon extends Sprite {
 		final double THRUST = 0.85;
 		final int MAX_VELOCITY = 39;
 
-		final int MY_SLOW_VELOCITY = 1;
+		final int MY_SLOW_VELOCITY = 2;
 
 		// I want to create my own moving logic here, which is simple:
 
@@ -212,7 +214,7 @@ public class Falcon extends Sprite {
 
 		//down-cast (widen the aperture of) the graphics object to gain access to methods of Graphics2D
 		//and render the raster image according to the image-state
-		renderRaster((Graphics2D) g, getRasterMap().get(imageState));
+		renderPlayerPlaneRaster((Graphics2D) g, getRasterMap().get(imageState));
 
 	}
 
@@ -221,6 +223,17 @@ public class Falcon extends Sprite {
 		g.drawOval(getCenter().x - getRadius(), getCenter().y - getRadius(), getRadius() *2, getRadius() *2);
 	}
 
+	private void renderPlayerPlaneRaster(Graphics2D g2d, BufferedImage bufferedImage) {
+		if (bufferedImage == null) return;
+
+		// Custom rendering logic for LaserBlue
+		// This might involve different scaling, positioning, or other graphical adjustments
+		// specific to the laser's appearance and behavior
+
+		// Example: Simple rendering without scaling
+		g2d.drawImage(bufferedImage, getCenter().x - bufferedImage.getWidth() / 2,
+				getCenter().y - bufferedImage.getHeight() / 2, null);
+	}
 
 
 } //end class
