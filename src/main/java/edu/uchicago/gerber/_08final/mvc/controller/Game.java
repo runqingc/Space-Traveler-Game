@@ -100,6 +100,7 @@ public class Game implements Runnable, KeyListener {
         long lastAsteroidSpawnTime = startTime;
         long lastFireTime = startTime;
 
+
         // this thread animates the scene
         while (Thread.currentThread() == animationThread) {
 

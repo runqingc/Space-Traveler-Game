@@ -67,7 +67,9 @@ public class CommandCenter {
 		initFalconAndDecrementFalconNum();
 		//add the falcon to the movFriends list
 		opsQueue.enqueue(falcon, GameOp.Action.ADD);
-
+		for (int i = 0; i < 150; i++) {  // Adjust number of stars as needed
+			opsQueue.enqueue(new BackgroundStar(), GameOp.Action.ADD);
+		}
 
 
 	}

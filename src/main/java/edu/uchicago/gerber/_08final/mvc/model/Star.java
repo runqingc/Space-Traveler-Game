@@ -25,7 +25,7 @@ public class Star implements Movable{
     public void draw(Graphics g) {
 
         g.setColor(color);
-        g.drawOval(center.x, center.y, getRadius(), getRadius());
+        g.fillOval(center.x, center.y, getRadius(), getRadius());
 
     }
 
