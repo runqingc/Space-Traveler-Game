@@ -15,7 +15,7 @@ public class EnemyBlack3 extends Sprite{
 
         setTeam(Team.FOE);
 
-        setRadius(100);
+        setRadius(40);
 
         // suppose the Enemy will always comes from top
         setCenter(new Point(Game.R.nextInt(Game.DIM.width), 0));

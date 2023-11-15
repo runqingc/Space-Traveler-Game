@@ -3,21 +3,30 @@ package edu.uchicago.gerber._08final.mvc.model;
 import edu.uchicago.gerber._08final.mvc.controller.Game;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LaserBlue extends Sprite{
 
-    int track;
 
     private int index = 0;
 
+    // where does the laser shoot from
+    public enum LaserType {
+        MIDDLE,
+        LEFT_WING,
+        LEFT,
+        RIGHT,
+        RIGHT_WING,
+        RAIN}
+    private LaserType laserType;
 
-    public LaserBlue(Falcon falcon, int track) {
+    public LaserBlue(Falcon falcon, LaserType type) {
 
         setTeam(Team.FRIEND);
-
+        laserType = type;
         setRadius(5);
 
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
@@ -30,10 +39,51 @@ public class LaserBlue extends Sprite{
 
         final double FIRE_POWER = 35.0;
 
-        setCenter(falcon.getCenter());
-        setDeltaY(falcon.getDeltaY() - FIRE_POWER);
+        double vectorX;
+        double vectorY;
+
+        switch (laserType){
+
+            case MIDDLE:
+                setCenter(falcon.getCenter());
+                setDeltaY(falcon.getDeltaY() - FIRE_POWER);
+                break;
+            case LEFT_WING:
+                setCenter(new Point(falcon.getCenter().x-40, falcon.getCenter().y));
+                setDeltaY(falcon.getDeltaY() - FIRE_POWER);
+                break;
+            case RIGHT_WING:
+                setCenter(new Point(falcon.getCenter().x+40, falcon.getCenter().y));
+                setDeltaY(falcon.getDeltaY() - FIRE_POWER);
+                break;
+            case LEFT:
+                setCenter(new Point(falcon.getCenter().x-60, falcon.getCenter().y+10));
+                // set orientation
+                setOrientation(80);
+                vectorX = Math.cos(Math.toRadians(getOrientation())) * FIRE_POWER;
+                vectorY = Math.sin(Math.toRadians(getOrientation())) * FIRE_POWER;
+
+                // Update the laser's speed (deltaX and deltaY)
+                setDeltaX(getDeltaX() - vectorX);
+                setDeltaY(getDeltaY() - vectorY);
+                break;
 
 
+            case RIGHT:
+                setCenter(new Point(falcon.getCenter().x+60, falcon.getCenter().y+10));
+                setOrientation(80);
+                // set speed
+                vectorX = Math.cos(Math.toRadians(getOrientation()))*FIRE_POWER;
+                vectorY = Math.sin(Math.toRadians(getOrientation()))*FIRE_POWER;
+                setDeltaX(getDeltaX() + vectorX);
+                setDeltaY(getDeltaY() - vectorY);
+                break;
+            default:
+                break;
+        }
+
+
+        setOrientation(0);
 
     }
 
@@ -45,12 +95,12 @@ public class LaserBlue extends Sprite{
     @Override
     public void move() {
         super.move(); // Retains the basic movement logic from the Sprite class
-
         // Check if the LaserBlue is outside the game frame
         if (isOutOfFrame()) {
             // Set expiry to 1 so it will be removed in the next game cycle
             setExpiry(1);
         }
+
     }
 
     @Override
@@ -64,15 +114,31 @@ public class LaserBlue extends Sprite{
     }
 
     private void renderLaserRaster(Graphics2D g2d, BufferedImage bufferedImage) {
-        if (bufferedImage == null) return;
+        double angleRadians = Math.toRadians(0);
 
-        // Custom rendering logic for LaserBlue
-        // This might involve different scaling, positioning, or other graphical adjustments
-        // specific to the laser's appearance and behavior
+        switch (laserType){
 
-        // Example: Simple rendering without scaling
-        g2d.drawImage(bufferedImage, getCenter().x - bufferedImage.getWidth() / 2,
-                getCenter().y - bufferedImage.getHeight() / 2, null);
+            case MIDDLE:
+            case LEFT_WING:
+            case RIGHT_WING:
+                break;
+            case LEFT:
+                angleRadians = Math.toRadians(350);
+                break;
+            case RIGHT:
+                angleRadians = Math.toRadians(10);
+                break;
+            default:
+                break;
+        }
+
+        AffineTransform transform = new AffineTransform();
+        transform.translate(getCenter().x, getCenter().y);
+        transform.rotate(angleRadians);
+        transform.translate(-bufferedImage.getWidth() / 2, -bufferedImage.getHeight() / 2);
+
+        g2d.drawImage(bufferedImage, transform, null);
+
     }
 
 }

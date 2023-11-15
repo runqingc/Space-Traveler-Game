@@ -119,9 +119,13 @@ public class Game implements Runnable, KeyListener {
             // Auto fire for every 0.5 seconds
             if(currentTime-lastFireTime>=500){
                 synchronized (this){
-                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), 3), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.MIDDLE), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT_WING), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RIGHT_WING), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RIGHT), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT), GameOp.Action.ADD);
                 }
-                Sound.playSound("thump.wav");
+                Sound.playSound("laser.wav");
                 lastFireTime = currentTime;
             }
 
@@ -156,9 +160,11 @@ public class Game implements Runnable, KeyListener {
     } // end run
 
     private void checkFloaters() {
-        spawnNewWallFloater();
+
+
+//        spawnNewWallFloater();
         spawnShieldFloater();
-        spawnNukeFloater();
+//        spawnNukeFloater();
     }
 
 

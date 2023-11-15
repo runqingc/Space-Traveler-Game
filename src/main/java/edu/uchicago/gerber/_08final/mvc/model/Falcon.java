@@ -38,10 +38,7 @@ public class Falcon extends Sprite {
 
 	}
 
-
-	//instance fields (getters/setters provided by Lombok @Data above)
-	private int shield;
-
+	private int laserLevel = 1;
 	private int nukeMeter;
 	private int invisible;
 	private boolean maxSpeedAttained;
@@ -110,7 +107,7 @@ public class Falcon extends Sprite {
 		// I want to create my own moving logic here, which is simple:
 
 		// the head of the plane will always face up
-		setOrientation(270);
+		setOrientation(0);
 
 		// use up, down, left, right to control the movement of the plane, firing will not make the plane backward
 
