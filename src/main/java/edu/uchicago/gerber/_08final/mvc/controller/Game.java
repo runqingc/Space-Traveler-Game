@@ -58,7 +58,7 @@ public class Game implements Runnable, KeyListener {
     private final Clip soundThrust;
     private final Clip soundBackground;
 
-
+    long lastRainTime = -1;
 
     // ===============================================
     // ==CONSTRUCTOR
@@ -100,11 +100,12 @@ public class Game implements Runnable, KeyListener {
         long lastAsteroidSpawnTime = startTime;
         long lastFireTime = startTime;
 
+        long currentTime;
 
         // this thread animates the scene
         while (Thread.currentThread() == animationThread) {
 
-            long currentTime = System.currentTimeMillis();
+            currentTime = System.currentTimeMillis();
             if(currentTime%8000<40){
                 CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack3(), GameOp.Action.ADD);
             }
@@ -114,12 +115,25 @@ public class Game implements Runnable, KeyListener {
             if (currentTime - lastAsteroidSpawnTime >= 8000) {
                 CommandCenter.getInstance().getOpsQueue().enqueue(new Asteroid(0), GameOp.Action.ADD);
                 lastAsteroidSpawnTime = currentTime; // Reset the last spawn time
+
             }
+
+
+
+
+            if(lastRainTime>0 && currentTime-lastRainTime<=3000){
+                for(int i=0; i<2 && System.currentTimeMillis()-startTime<=3000; ++i){
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RAIN), GameOp.Action.ADD);
+                }
+            }
+
 
             // Auto fire for every 0.5 seconds
             if(currentTime-lastFireTime>=500){
                 synchronized (this){
+
                     CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.MIDDLE), GameOp.Action.ADD);
+//                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RAIN), GameOp.Action.ADD);
                     if(CommandCenter.getInstance().getFalcon().getLaserLevel()>=2){
                         CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT_WING), GameOp.Action.ADD);
                         CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RIGHT_WING), GameOp.Action.ADD);
@@ -170,6 +184,7 @@ public class Game implements Runnable, KeyListener {
         spawnShieldFloater();
 //        spawnNukeFloater();
         spawnBoltFloater();
+        spawnStarFloater();
     }
 
 
@@ -192,6 +207,9 @@ public class Game implements Runnable, KeyListener {
                     //remove the friend (so long as he is not protected)
                     if (!movFriend.isProtected()) {
                         CommandCenter.getInstance().getOpsQueue().enqueue(movFriend, GameOp.Action.REMOVE);
+                        if(movFriend instanceof LaserBlue){
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlueDebris((Sprite) movFoe), GameOp.Action.ADD);
+                        }
                     }
 
                     //remove the foe
@@ -240,6 +258,11 @@ public class Game implements Runnable, KeyListener {
                     case "BoltFloater":
                         // haven't chosen sound yet
                         CommandCenter.getInstance().getFalcon().setLaserLevel(CommandCenter.getInstance().getFalcon().getLaserLevel()+1);
+                        break;
+                    case "StarFloater":
+                        lastRainTime = System.currentTimeMillis();
+                        break;
+
 
                 }
                 CommandCenter.getInstance().getOpsQueue().enqueue(movFloater, GameOp.Action.REMOVE);
@@ -347,6 +370,12 @@ public class Game implements Runnable, KeyListener {
 
         if (CommandCenter.getInstance().getFrame() % BoltFloater.SPAWN_BOLT_FLOATER == 0 && CommandCenter.getInstance().getFalcon().getLaserLevel()<3) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new BoltFloater(), GameOp.Action.ADD);
+        }
+    }
+
+    private void spawnStarFloater(){
+        if (CommandCenter.getInstance().getFrame() % StarFloater.SPAWN_STAR_FLOATER == 0 ) {
+            CommandCenter.getInstance().getOpsQueue().enqueue(new StarFloater(), GameOp.Action.ADD);
         }
     }
 

@@ -35,9 +35,11 @@ public class LaserBlue extends Sprite{
         rasterMap.put(2, loadGraphic("/imgs/laser/laserBlue16.png"));
         rasterMap.put(3, loadGraphic("/imgs/laser/laserBlue01.png"));
         setRasterMap(rasterMap);
-        setExpiry(rasterMap.size() * 5);
+        setExpiry(rasterMap.size() * 15);
 
         final double FIRE_POWER = 35.0;
+        final double RAIN_POWER = 20.0;
+
 
         double vectorX;
         double vectorY;
@@ -78,6 +80,21 @@ public class LaserBlue extends Sprite{
                 setDeltaX(getDeltaX() + vectorX);
                 setDeltaY(getDeltaY() - vectorY);
                 break;
+
+            case RAIN:
+                // random place in the top right of the space
+                setCenter(new Point(Game.DIM.width-5, Game.R.nextInt(Game.DIM.height/3*2)));
+                if(Game.R.nextInt()%2==0){
+                    setCenter(new Point(Game.R.nextInt(Game.DIM.width), 5));
+                }
+
+                setOrientation(45);
+                vectorX = Math.cos(Math.toRadians(getOrientation()))*RAIN_POWER;
+                vectorY = Math.sin(Math.toRadians(getOrientation()))*RAIN_POWER;
+                setDeltaX(getDeltaX() -vectorX);
+                setDeltaY(getDeltaY() + vectorY);
+                break;
+
             default:
                 break;
         }
@@ -109,7 +126,7 @@ public class LaserBlue extends Sprite{
         renderLaserRaster((Graphics2D) g, getRasterMap().get(index));
         //hold the image for two frames to slow down the dust cloud animation
         //we already have a simple decrement-to-zero counter with expiry; see move() method of Sprite.
-        if (getExpiry() % 5 == 0) index++;
+        if (getExpiry() % 15 == 0) index++;
 
     }
 
@@ -127,6 +144,9 @@ public class LaserBlue extends Sprite{
                 break;
             case RIGHT:
                 angleRadians = Math.toRadians(10);
+                break;
+            case RAIN:
+                angleRadians = Math.toRadians(225);
                 break;
             default:
                 break;
