@@ -11,11 +11,16 @@ public class GreyBullet02 extends Sprite{
 
     final double FIRE_POWER = 15.0;
 
+    // which direction will the bullet come from
     public enum BulletType{
-
-        MIDDLE,
-        LEFT_WING,
-        RIGHT_WING,
+        S,
+        SW,
+        W,
+        NW,
+        N,
+        NE,
+        E,
+        SE
     }
 
     private BulletType bulletType;
@@ -29,25 +34,45 @@ public class GreyBullet02 extends Sprite{
         //the spin will be either plus or minus 0-9
         setSpin(somePosNegValue(10));
 
-        // set last fire time
-        enemyShip.lastFireTime = System.currentTimeMillis();
 
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
-        rasterMap.put(0, loadGraphic("/imgs/Meteors/meteorBrown_small1.png"));
+        rasterMap.put(0, loadGraphic("/imgs/Meteors/meteorGrey_small2.png"));
         setRasterMap(rasterMap);
 
         double vectorX;
         double vectorY;
 
+        setCenter(enemyShip.getCenter());
+
         switch (bulletType){
 
-            case MIDDLE:
-                setCenter(enemyShip.getCenter());
+            case S:
                 setDeltaY(FIRE_POWER);
                 break;
-            case LEFT_WING:
+            case SW:
+                setDeltaY(FIRE_POWER*0.7071);
+                setDeltaX(-FIRE_POWER*0.7071);
                 break;
-            case RIGHT_WING:
+            case W:
+                setDeltaX(-FIRE_POWER);
+                break;
+            case NW:
+                setDeltaY(-FIRE_POWER*0.7071);
+                setDeltaX(-FIRE_POWER*0.7071);
+                break;
+            case N:
+                setDeltaY(-FIRE_POWER);
+                break;
+            case NE:
+                setDeltaY(-FIRE_POWER*0.7071);
+                setDeltaX(FIRE_POWER*0.7071);
+                break;
+            case E:
+                setDeltaX(FIRE_POWER);
+                break;
+            case SE:
+                setDeltaY(FIRE_POWER*0.7071);
+                setDeltaX(FIRE_POWER*0.7071);
                 break;
             default:
                 break;

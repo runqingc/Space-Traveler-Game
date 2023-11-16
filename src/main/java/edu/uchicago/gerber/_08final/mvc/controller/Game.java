@@ -11,8 +11,6 @@ import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.Random;
 
-import static java.awt.Event.DOWN;
-
 
 // ===============================================
 // == This Game class is the CONTROLLER
@@ -105,13 +103,14 @@ public class Game implements Runnable, KeyListener {
         // this thread animates the scene
         while (Thread.currentThread() == animationThread) {
 
+
             currentTime = System.currentTimeMillis();
             if(currentTime%8000<40){
-                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack3(), GameOp.Action.ADD);
+                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyYellowUFO(), GameOp.Action.ADD);
             }
 
             if(currentTime%9000<40){
-                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack2(), GameOp.Action.ADD);
+                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack5(), GameOp.Action.ADD);
             }
 
             // Enqueue a new Asteroid every 8 seconds (8000 milliseconds)
@@ -122,43 +121,10 @@ public class Game implements Runnable, KeyListener {
             }
 
 
-
-
             if(lastRainTime>0 && currentTime-lastRainTime<=3000){
                 for(int i=0; i<2 && System.currentTimeMillis()-startTime<=3000; ++i){
                     CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RAIN), GameOp.Action.ADD);
                 }
-            }
-
-
-            // Auto fire for every 0.5 seconds
-//            if(currentTime-lastFireTime>=500){
-//                synchronized (this){
-//
-//                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.MIDDLE), GameOp.Action.ADD);
-//
-//                    if(CommandCenter.getInstance().getFalcon().getLaserLevel()>=2){
-//                        CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT_WING), GameOp.Action.ADD);
-//                        CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RIGHT_WING), GameOp.Action.ADD);
-//                    }
-//                    if(CommandCenter.getInstance().getFalcon().getLaserLevel()>=3){
-//                        CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RIGHT), GameOp.Action.ADD);
-//                        CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT), GameOp.Action.ADD);
-//                    }
-//                }
-//                Sound.playSound("laser.wav");
-//                lastFireTime = currentTime;
-//            }
-
-
-            // for every enemy ship, check floater
-            for(Movable movFoe : CommandCenter.getInstance().getMovFoes()){
-                if(movFoe instanceof EnemyBlack2){
-                    if (CommandCenter.getInstance().getFrame() % EnemyShip.SHOOTING_INTERVAL == 0) {
-                        CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.MIDDLE), GameOp.Action.ADD);
-                    }
-                }
-
             }
 
 
@@ -173,6 +139,7 @@ public class Game implements Runnable, KeyListener {
             checkNewLevel();
             checkFloaters();
             checkFalconFire();
+            checkEnemyFire();
 
             //keep track of the frame for development purposes
             CommandCenter.getInstance().incrementFrame();
@@ -194,6 +161,13 @@ public class Game implements Runnable, KeyListener {
         } // end while
     } // end run
 
+
+
+    private void checkFoes(){
+
+    }
+
+
     private void checkFloaters() {
 
 
@@ -209,6 +183,85 @@ public class Game implements Runnable, KeyListener {
     private void checkFalconFire(){
         spawnBlueLaser();
         spawnRedLaser();
+    }
+
+    private void checkEnemyFire(){
+        // for every enemy ship, check floater
+        for(Movable movFoe : CommandCenter.getInstance().getMovFoes()){
+            if(movFoe instanceof EnemyBlack2){
+                if (CommandCenter.getInstance().getFrame() % EnemyBlack2.SHOOTING_INTERVAL == 0) {
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.S), GameOp.Action.ADD);
+                }
+            }else if(movFoe instanceof EnemyBlack1){
+                if (CommandCenter.getInstance().getFrame() % EnemyBlack1.SHOOTING_INTERVAL == 0){
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.S), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SW), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SE), GameOp.Action.ADD);
+//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.E), GameOp.Action.ADD);
+//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NE), GameOp.Action.ADD);
+//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.N), GameOp.Action.ADD);
+//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NW), GameOp.Action.ADD);
+//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.W), GameOp.Action.ADD);
+                }
+            }else if(movFoe instanceof EnemyBlack5){
+                EnemyBlack5 enemyBlack5 = (EnemyBlack5) movFoe;
+                if (CommandCenter.getInstance().getFrame() % EnemyBlack5.SHOOTING_INTERVAL == 0){
+                    if(enemyBlack5.lastFirePosition==1){
+                        enemyBlack5.lastFirePosition--;
+                        System.out.println("pos"+enemyBlack5.lastFirePosition);
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.S), GameOp.Action.ADD);
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NE), GameOp.Action.ADD);
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NW), GameOp.Action.ADD);
+
+                    }else{
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.N), GameOp.Action.ADD);
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SW), GameOp.Action.ADD);
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SE), GameOp.Action.ADD);
+                        enemyBlack5.lastFirePosition++;
+                        System.out.println("pos"+enemyBlack5.lastFirePosition);
+                    }
+                }
+            } else if (movFoe instanceof EnemyYellowUFO) {
+                EnemyYellowUFO enemyYellowUFO = (EnemyYellowUFO) movFoe;
+                if (CommandCenter.getInstance().getFrame() % EnemyYellowUFO.SHOOTING_INTERVAL == 0){
+                    enemyYellowUFO.lastFirePosition %= 8;
+                    switch (enemyYellowUFO.lastFirePosition) {
+                        case 0:
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.S), GameOp.Action.ADD);
+                            break;
+                        case 1:
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SW), GameOp.Action.ADD);
+                            break;
+                        case 2:
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.W), GameOp.Action.ADD);
+                            break;
+                        case 3:
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NW), GameOp.Action.ADD);
+                            break;
+                        case 4:
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.N), GameOp.Action.ADD);
+                            break;
+                        case 5:
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NE), GameOp.Action.ADD);
+                            break;
+                        case 6:
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.E), GameOp.Action.ADD);
+                            break;
+                        case 7:
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SE), GameOp.Action.ADD);
+                            break;
+                        default:
+                            // This should not happen, but it's here as a safeguard
+                            break;
+                    }
+                    // Increment and wrap around the last fire position
+                    enemyYellowUFO.lastFirePosition = (enemyYellowUFO.lastFirePosition + 1) % 8;
+
+                }
+
+            }
+
+        }
     }
 
 

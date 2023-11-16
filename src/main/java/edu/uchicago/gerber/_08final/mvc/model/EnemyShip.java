@@ -6,11 +6,6 @@ public abstract class EnemyShip extends Sprite{
 
     public int health;
 
-    long lastFireTime;
-
-    public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND * 2;
-
-
     public EnemyShip(){
         setTeam(Team.FOE);
     }

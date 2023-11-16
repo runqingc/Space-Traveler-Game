@@ -31,7 +31,7 @@ public class LaserRed extends Sprite{
 
         setTeam(Team.FRIEND);
         laserType = type;
-        setRadius(5);
+        setRadius(20);
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
         rasterMap.put(0, loadGraphic("/imgs/laser/laserRed04.png"));
         rasterMap.put(1, loadGraphic("/imgs/laser/laserRed06.png"));

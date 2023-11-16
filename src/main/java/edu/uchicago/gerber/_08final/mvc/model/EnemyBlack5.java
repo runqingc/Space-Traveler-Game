@@ -7,34 +7,19 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnemyBlack2 extends EnemyShip{
+public class EnemyBlack5 extends EnemyShip{
 
+    public int lastFirePosition;
 
-    // set shooting interval of the enemy ship
-    // fire every 2 seconds
-
-    public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND * 2;
-
-
-    // the health is related to its radius
-
-
-    public EnemyBlack2(){
-
-        super();
-
-        setRadius(60);
-
-
-
-        health = this.getRadius();
-
+    public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND * 3/2;
+    public EnemyBlack5(){
+        setRadius(90);
+        health = this.getRadius()+20;
         setCenter(new Point(Game.R.nextInt(Game.DIM.width), 0));
-
-        // set up picture
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
-        rasterMap.put(0, loadGraphic("/imgs/enemy/enemyBlack2.png"));
+        rasterMap.put(0, loadGraphic("/imgs/enemy/enemyBlack5.png"));
         setRasterMap(rasterMap);
+        lastFirePosition = 1;
 
         // slowly moving down the screen
         setDeltaY(2);
@@ -42,12 +27,8 @@ public class EnemyBlack2 extends EnemyShip{
     }
 
 
-
     @Override
     public void draw(Graphics g) {
         renderRaster((Graphics2D) g, getRasterMap().get(0));
     }
-
-
-
 }
