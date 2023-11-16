@@ -101,8 +101,8 @@ public class LaserBlue extends Sprite{
                 break;
         }
 
-
-        setOrientation(0);
+        // this line is potentially dangerous
+//        setOrientation(0);
 
     }
 

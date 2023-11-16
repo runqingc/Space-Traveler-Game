@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Data
 public class CommandCenter {
 
-	private  int numFalcons;
+	public  int numFalcons;
 	private  int level;
 	private  long score;
 	private  boolean paused;

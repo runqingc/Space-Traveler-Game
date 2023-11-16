@@ -110,6 +110,9 @@ public class Game implements Runnable, KeyListener {
                 CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack3(), GameOp.Action.ADD);
             }
 
+            if(currentTime%9000<40){
+                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack2(), GameOp.Action.ADD);
+            }
 
             // Enqueue a new Asteroid every 8 seconds (8000 milliseconds)
             if (currentTime - lastAsteroidSpawnTime >= 8000) {
@@ -146,6 +149,19 @@ public class Game implements Runnable, KeyListener {
                 Sound.playSound("laser.wav");
                 lastFireTime = currentTime;
             }
+
+
+            // for every enemy ship, check floater
+            for(Movable movFoe : CommandCenter.getInstance().getMovFoes()){
+                if(movFoe instanceof EnemyBlack2){
+                    if (CommandCenter.getInstance().getFrame() % EnemyShip.SHOOTING_INTERVAL == 0) {
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.MIDDLE), GameOp.Action.ADD);
+                    }
+                }
+
+            }
+
+
 
 
 
@@ -185,6 +201,7 @@ public class Game implements Runnable, KeyListener {
 //        spawnNukeFloater();
         spawnBoltFloater();
         spawnStarFloater();
+        spawnHeartFloater();
     }
 
 
@@ -270,15 +287,19 @@ public class Game implements Runnable, KeyListener {
                     case "BoltFloater":
                         // haven't chosen sound yet
                         CommandCenter.getInstance().getFalcon().setLaserLevel(CommandCenter.getInstance().getFalcon().getLaserLevel()+1);
+                        Sound.playSound("energy-1-107099.wav");
                         break;
                     case "StarFloater":
                         lastRainTime = System.currentTimeMillis();
+                        Sound.playSound("energy-2-90733.wav");
                         break;
-
+                    case "HeartFloater":
+                        CommandCenter.getInstance().numFalcons++;
+                        Sound.playSound("health_pickup.wav");
+                        break;
 
                 }
                 CommandCenter.getInstance().getOpsQueue().enqueue(movFloater, GameOp.Action.REMOVE);
-
 
             }//end if
         }//end for
@@ -394,6 +415,12 @@ public class Game implements Runnable, KeyListener {
     private void spawnStarFloater(){
         if (CommandCenter.getInstance().getFrame() % StarFloater.SPAWN_STAR_FLOATER == 0 ) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new StarFloater(), GameOp.Action.ADD);
+        }
+    }
+
+    private void spawnHeartFloater(){
+        if(CommandCenter.getInstance().getFrame() % HeartFloater.SPAWN_HEART_FLOATER ==0 && CommandCenter.getInstance().numFalcons<5){
+            CommandCenter.getInstance().getOpsQueue().enqueue(new HeartFloater(), GameOp.Action.ADD);
         }
     }
 

@@ -11,9 +11,10 @@ public class EnemyBlack2 extends EnemyShip{
 
 
     // set shooting interval of the enemy ship
-    public final long SHOOTING_INTERVAL = 2000;
+    // fire every 3 seconds
 
-    long lastFireTime;
+
+
 
     // the health is related to its radius
 
