@@ -39,6 +39,7 @@ public class Falcon extends Sprite {
 	}
 
 	private int laserLevel = 1;
+	private int redLaserLevel = 0;
 	private int nukeMeter;
 	private int invisible;
 	private boolean maxSpeedAttained;

@@ -26,11 +26,14 @@ public class GreyBullet02 extends Sprite{
 
         setRadius(20);
 
+        //the spin will be either plus or minus 0-9
+        setSpin(somePosNegValue(10));
+
         // set last fire time
         enemyShip.lastFireTime = System.currentTimeMillis();
 
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
-        rasterMap.put(0, loadGraphic("/imgs/laser/ufoYellow.png"));
+        rasterMap.put(0, loadGraphic("/imgs/Meteors/meteorBrown_small1.png"));
         setRasterMap(rasterMap);
 
         double vectorX;

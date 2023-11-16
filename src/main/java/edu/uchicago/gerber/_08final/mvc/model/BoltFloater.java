@@ -10,8 +10,8 @@ import java.util.Map;
 public class BoltFloater extends Floater{
 
 
-    //spawn every 10 seconds
-    public static final int SPAWN_BOLT_FLOATER = Game.FRAMES_PER_SECOND * 10;
+    //spawn every 11 seconds
+    public static final int SPAWN_BOLT_FLOATER = Game.FRAMES_PER_SECOND * 11;
 
 
     public BoltFloater() {

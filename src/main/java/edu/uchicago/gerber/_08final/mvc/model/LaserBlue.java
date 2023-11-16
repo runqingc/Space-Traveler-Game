@@ -15,6 +15,8 @@ public class LaserBlue extends Sprite{
 
     public final int DAMAGE = 20;
 
+    public static final int BLUE_FIRE_INTERVAL=Game.FRAMES_PER_SECOND/2;
+
     // where does the laser shoot from
     public enum LaserType {
         MIDDLE,
@@ -37,7 +39,12 @@ public class LaserBlue extends Sprite{
         rasterMap.put(2, loadGraphic("/imgs/laser/laserBlue16.png"));
         rasterMap.put(3, loadGraphic("/imgs/laser/laserBlue01.png"));
         setRasterMap(rasterMap);
-        setExpiry(rasterMap.size() * 15);
+
+        if(laserType==LaserType.RAIN){
+            setExpiry(rasterMap.size() * 15);
+        }else{
+            setExpiry(rasterMap.size() * 8);
+        }
 
         final double FIRE_POWER = 35.0;
         final double RAIN_POWER = 20.0;
@@ -50,15 +57,15 @@ public class LaserBlue extends Sprite{
 
             case MIDDLE:
                 setCenter(falcon.getCenter());
-                setDeltaY(falcon.getDeltaY() - FIRE_POWER);
+                setDeltaY(-FIRE_POWER);
                 break;
             case LEFT_WING:
                 setCenter(new Point(falcon.getCenter().x-40, falcon.getCenter().y));
-                setDeltaY(falcon.getDeltaY() - FIRE_POWER);
+                setDeltaY(-FIRE_POWER);
                 break;
             case RIGHT_WING:
                 setCenter(new Point(falcon.getCenter().x+40, falcon.getCenter().y));
-                setDeltaY(falcon.getDeltaY() - FIRE_POWER);
+                setDeltaY(-FIRE_POWER);
                 break;
             case LEFT:
                 setCenter(new Point(falcon.getCenter().x-60, falcon.getCenter().y+10));
@@ -123,12 +130,26 @@ public class LaserBlue extends Sprite{
     }
 
     @Override
+    public boolean isProtected() {
+        return false;
+    }
+
+    @Override
     public void draw(Graphics g) {
 
-        renderLaserRaster((Graphics2D) g, getRasterMap().get(index));
-        //hold the image for two frames to slow down the dust cloud animation
-        //we already have a simple decrement-to-zero counter with expiry; see move() method of Sprite.
-        if (getExpiry() % 15 == 0) index++;
+        if(laserType==LaserType.RAIN){
+            renderLaserRaster((Graphics2D) g, getRasterMap().get(index));
+            //hold the image for two frames to slow down the dust cloud animation
+            //we already have a simple decrement-to-zero counter with expiry; see move() method of Sprite.
+            if (getExpiry() % 15 == 0) index++;
+        }else{
+            renderLaserRaster((Graphics2D) g, getRasterMap().get(index));
+            //hold the image for two frames to slow down the dust cloud animation
+            //we already have a simple decrement-to-zero counter with expiry; see move() method of Sprite.
+            if (getExpiry() % 8 == 0) index++;
+        }
+
+
 
     }
 

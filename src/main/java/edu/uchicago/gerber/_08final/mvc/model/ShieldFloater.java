@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ShieldFloater extends Floater {
-	//spawn every 25 seconds
-	public static final int SPAWN_SHIELD_FLOATER = Game.FRAMES_PER_SECOND * 25;
+	//spawn every 23 seconds
+	public static final int SPAWN_SHIELD_FLOATER = Game.FRAMES_PER_SECOND * 23;
 	public ShieldFloater() {
 
 		Map<Integer, BufferedImage> rasterMap = new HashMap<>();

@@ -13,7 +13,7 @@ public class WhiteCloudDebris extends Sprite{
     public WhiteCloudDebris(Sprite explodingSprite) {
 
         //DEBRIS means that this sprite is inert, and does not interact with other teams.
-        setTeam(Team.DEBRIS);
+        setTeam(Team.BACKGROUND);
 
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
         //see readme.txt file in the resources/imgs/exp directory for how I created these assets

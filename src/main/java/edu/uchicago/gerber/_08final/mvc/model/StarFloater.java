@@ -10,8 +10,8 @@ import java.util.Map;
 public class StarFloater extends Floater{
 
 
-    //spawn every 23 seconds
-    public static final int SPAWN_STAR_FLOATER = Game.FRAMES_PER_SECOND * 23;
+    //spawn every 29 seconds
+    public static final int SPAWN_STAR_FLOATER = Game.FRAMES_PER_SECOND * 29;
 
     public StarFloater(){
 
