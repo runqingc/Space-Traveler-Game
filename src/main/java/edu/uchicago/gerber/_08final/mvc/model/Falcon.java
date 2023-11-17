@@ -63,7 +63,7 @@ public class Falcon extends Sprite {
 	public Falcon() {
 
 		setTeam(Team.FRIEND);
-
+		maxGreenLaserNumber = 0;
 		setRadius(MIN_RADIUS);
 
 
@@ -84,7 +84,7 @@ public class Falcon extends Sprite {
 
 	@Override
 	public boolean isProtected() {
-		return  false;
+		return false;
 
 	}
 

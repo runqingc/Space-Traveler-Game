@@ -106,7 +106,7 @@ public class Game implements Runnable, KeyListener {
 
             currentTime = System.currentTimeMillis();
             if(currentTime%8000<40){
-                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyYellowUFO(), GameOp.Action.ADD);
+                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack4(), GameOp.Action.ADD);
             }
 
             if(currentTime%9000<40){
@@ -199,11 +199,6 @@ public class Game implements Runnable, KeyListener {
                     CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.S), GameOp.Action.ADD);
                     CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SW), GameOp.Action.ADD);
                     CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SE), GameOp.Action.ADD);
-//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.E), GameOp.Action.ADD);
-//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NE), GameOp.Action.ADD);
-//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.N), GameOp.Action.ADD);
-//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NW), GameOp.Action.ADD);
-//                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.W), GameOp.Action.ADD);
                 }
             }else if(movFoe instanceof EnemyBlack5){
                 EnemyBlack5 enemyBlack5 = (EnemyBlack5) movFoe;
@@ -260,7 +255,17 @@ public class Game implements Runnable, KeyListener {
                     enemyYellowUFO.lastFirePosition = (enemyYellowUFO.lastFirePosition + 1) % 8;
 
                 }
-
+            }else if(movFoe instanceof EnemyBlack4){
+                if (CommandCenter.getInstance().getFrame() % EnemyBlack4.SHOOTING_INTERVAL == 0){
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.S), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SW), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SE), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.E), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NE), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.N), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NW), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.W), GameOp.Action.ADD);
+                }
             }
 
         }
@@ -317,10 +322,15 @@ public class Game implements Runnable, KeyListener {
                         if(movFoe2.health<=0){
                             CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
                         }
-                    }
-
-
-                    else{
+                    }else if((movFriend instanceof LaserGreen) && (movFoe instanceof EnemyShip)){
+                        EnemyShip movFoe1 = (EnemyShip) movFoe;
+                        LaserGreen laserGreen = (LaserGreen) movFriend;
+                        movFoe1.health -= laserGreen.DAMAGE;
+                        if(movFoe1.health<=0){
+                            CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
+                        }
+                        // can add explode effect of enemy here
+                    } else{
                         CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
                     }
 

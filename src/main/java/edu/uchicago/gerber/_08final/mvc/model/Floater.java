@@ -16,7 +16,7 @@ public abstract class Floater extends Sprite {
         //default values, all of which can be overridden in the extending concrete classes
         setExpiry(250);
         setColor(Color.WHITE);
-        setRadius(60);
+        setRadius(40);
         //set random DeltaX
         setDeltaX(somePosNegValue(10));
         //set random DeltaY

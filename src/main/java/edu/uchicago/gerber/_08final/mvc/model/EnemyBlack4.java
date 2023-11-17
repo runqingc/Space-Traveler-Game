@@ -11,7 +11,7 @@ public class EnemyBlack4 extends EnemyShip{
 
 
     // need to set its fire logic
-
+    public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND * 3;
 
     public EnemyBlack4(){
 

@@ -9,11 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LaserGreen extends Sprite {
-    private double angle; // The current angle of the laser around the Falcon
+
     private double orbitRadius; // The radius of the orbit
     private Falcon falcon; // The Falcon object that the laser orbits around
 
-    public static final int GREEN_FIRE_INTERVAL= Game.FRAMES_PER_SECOND;
+    public final int DAMAGE = 20;
+
+    public static final int GREEN_FIRE_INTERVAL= Game.FRAMES_PER_SECOND *2;
 
     public LaserGreen(Falcon falcon) {
         this.falcon = falcon;
