@@ -296,8 +296,9 @@ public class Game implements Runnable, KeyListener {
                             // apply range damage
                         }
                         if(movFriend instanceof LaserGreen){
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenDebris((Sprite) movFriend), GameOp.Action.ADD);
                             CommandCenter.getInstance().getFalcon().greenLaserNumber--;
-                            // green debris here
+
                         }
                     }
 
