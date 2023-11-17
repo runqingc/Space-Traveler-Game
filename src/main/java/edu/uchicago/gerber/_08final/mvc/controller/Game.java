@@ -176,6 +176,7 @@ public class Game implements Runnable, KeyListener {
 //        spawnNukeFloater();
         spawnBoltFloater();
         spawnRedBoltFloater();
+        spawnGreenBoltFloater();
         spawnStarFloater();
         spawnHeartFloater();
     }
@@ -183,6 +184,7 @@ public class Game implements Runnable, KeyListener {
     private void checkFalconFire(){
         spawnBlueLaser();
         spawnRedLaser();
+        spawnGreenLaser();
     }
 
     private void checkEnemyFire(){
@@ -292,7 +294,10 @@ public class Game implements Runnable, KeyListener {
                         if(movFriend instanceof LaserRed){
                             CommandCenter.getInstance().getOpsQueue().enqueue(new LaserRedDebris((Sprite) movFriend), GameOp.Action.ADD);
                             // apply range damage
-
+                        }
+                        if(movFriend instanceof LaserGreen){
+                            CommandCenter.getInstance().getFalcon().greenLaserNumber--;
+                            // green debris here
                         }
                     }
 
@@ -378,11 +383,13 @@ public class Game implements Runnable, KeyListener {
                         CommandCenter.getInstance().numFalcons++;
                         Sound.playSound("health_pickup.wav");
                         break;
+                    case "GreenBoltFloater":
+                        CommandCenter.getInstance().getFalcon().maxGreenLaserNumber+=2;
+                        Sound.playSound("energy-1-107099.wav");
                     default:
                         break;
                 }
                 CommandCenter.getInstance().getOpsQueue().enqueue(movFloater, GameOp.Action.REMOVE);
-
             }//end if
         }//end for
 
@@ -501,6 +508,12 @@ public class Game implements Runnable, KeyListener {
         }
     }
 
+    private void spawnGreenBoltFloater(){
+        if(CommandCenter.getInstance().getFrame() % GreenBoltFloater.SPAWN_GREEN_BOLT_FLOATER==0 && CommandCenter.getInstance().getFalcon().maxGreenLaserNumber<6){
+            CommandCenter.getInstance().getOpsQueue().enqueue(new GreenBoltFloater(), GameOp.Action.ADD);
+        }
+    }
+
     private void spawnStarFloater(){
         if (CommandCenter.getInstance().getFrame() % StarFloater.SPAWN_STAR_FLOATER == 0 ) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new StarFloater(), GameOp.Action.ADD);
@@ -528,6 +541,17 @@ public class Game implements Runnable, KeyListener {
         }
 
     }
+
+
+    private void spawnGreenLaser(){
+
+        if(CommandCenter.getInstance().getFrame()%LaserGreen.GREEN_FIRE_INTERVAL==0 && CommandCenter.getInstance().getFalcon().greenLaserNumber<=CommandCenter.getInstance().getFalcon().maxGreenLaserNumber){
+            CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreen(CommandCenter.getInstance().getFalcon()), GameOp.Action.ADD);
+        }
+
+    }
+
+
 
     private void spawnBlueLaser(){
 

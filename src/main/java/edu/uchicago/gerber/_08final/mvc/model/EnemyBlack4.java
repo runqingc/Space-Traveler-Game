@@ -7,17 +7,31 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RedBoltFloater extends Floater{
+public class EnemyBlack4 extends EnemyShip{
 
-    // spawn every 19 seconds
-    public static final int SPAWN_RED_BOLT_FLOATER = Game.FRAMES_PER_SECOND * 19;
 
-    public RedBoltFloater(){
+    // need to set its fire logic
 
+
+    public EnemyBlack4(){
+
+        super();
+
+        setRadius(100);
+
+        health = getRadius()+50;
+
+        setCenter(new Point(Game.R.nextInt(Game.DIM.width), 0));
+
+
+        // set up picture
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
-        rasterMap.put(0, loadGraphic("/imgs/powerUp/powerupRed_bolt.png"));
+        rasterMap.put(0, loadGraphic("/imgs/enemy/enemyBlack4.png"));
         setRasterMap(rasterMap);
-        setExpiry(260);
+
+        // slowly moving down the screen
+        setDeltaY(2);
+
 
     }
 
@@ -25,5 +39,4 @@ public class RedBoltFloater extends Floater{
     public void draw(Graphics g) {
         renderRaster((Graphics2D) g, getRasterMap().get(0));
     }
-
 }

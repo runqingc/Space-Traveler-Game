@@ -7,15 +7,14 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RedBoltFloater extends Floater{
+public class GreenBoltFloater extends Floater{
 
-    // spawn every 19 seconds
-    public static final int SPAWN_RED_BOLT_FLOATER = Game.FRAMES_PER_SECOND * 19;
+    public static final int SPAWN_GREEN_BOLT_FLOATER = Game.FRAMES_PER_SECOND * 17;
 
-    public RedBoltFloater(){
+    public GreenBoltFloater(){
 
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
-        rasterMap.put(0, loadGraphic("/imgs/powerUp/powerupRed_bolt.png"));
+        rasterMap.put(0, loadGraphic("/imgs/powerUp/powerupGreen_bolt.png"));
         setRasterMap(rasterMap);
         setExpiry(260);
 
@@ -25,5 +24,7 @@ public class RedBoltFloater extends Floater{
     public void draw(Graphics g) {
         renderRaster((Graphics2D) g, getRasterMap().get(0));
     }
+
+
 
 }
