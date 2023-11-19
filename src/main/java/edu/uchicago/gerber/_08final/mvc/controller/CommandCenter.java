@@ -18,7 +18,7 @@ public class CommandCenter {
 
 	public  int numFalcons;
 	public int numStar;
-	public int maxStar = 10;
+	public int maxStar = 15;
 	private int numBoss;
 	private  int level;
 	private  long score;
@@ -68,7 +68,7 @@ public class CommandCenter {
 		setScore(0);
 		setPaused(false);
 		//set to one greater than number of falcons lives in your game as initFalconAndDecrementNum() also decrements
-		setNumFalcons(4);
+		setNumFalcons(6);
 		setNumStar(0);
 		setNumBoss(0);
 		initFalconAndDecrementFalconNum();

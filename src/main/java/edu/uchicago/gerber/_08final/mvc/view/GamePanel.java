@@ -111,17 +111,19 @@ public class GamePanel extends Panel {
         graphics.drawString("Score :  " + CommandCenter.getInstance().getScore(), fontWidth, fontHeight);
 
         //draw the level upper-left corner always
-        String levelText = "Level: " + CommandCenter.getInstance().getLevel();
-        graphics.drawString(levelText, 20, 30); //upper-left corner
+//        String levelText = "Level: " + CommandCenter.getInstance().getLevel();
+//        graphics.drawString(levelText, 20, 30); //upper-left corner
 
         //build the status string array with possible messages in middle of screen
         List<String> statusArray = new ArrayList<>();
-        if (CommandCenter.getInstance().getFalcon().getShowLevel() > 0) statusArray.add(levelText);
+//        if (CommandCenter.getInstance().getLevel() >= 0) statusArray.add(levelText);
         if (CommandCenter.getInstance().getFalcon().isMaxSpeedAttained()) statusArray.add("WARNING - SLOW DOWN");
         if (CommandCenter.getInstance().getFalcon().getNukeMeter() > 0) statusArray.add("PRESS N for NUKE");
 
+
+
         //draw the statusArray strings to middle of screen
-        if (statusArray.size() > 0)
+        if (!statusArray.isEmpty())
             displayTextOnScreen(graphics, statusArray.toArray(new String[0]));
 
 
@@ -253,9 +255,17 @@ public class GamePanel extends Panel {
 
     private void drawStarCollecting(Graphics g){
 
-        int xVal = 280;
+        int xVal = 345;
         int yVal =  90;
-        BufferedImage img = loadGraphic("/imgs/UI/glassPanel_corners.png");
+        BufferedImage img = loadGraphic("/imgs/UI/glassPanel_projection.png");
+
+
+        g.setFont(fontNormal);
+        g.drawString("LEVEL :  " + (CommandCenter.getInstance().getLevel()+1), 275,
+                50);
+        g.drawString(CommandCenter.getInstance().numStar + " / " +
+                        CommandCenter.getInstance().maxStar, 730,
+                50);
         if (img != null){
             Graphics2D g2d = (Graphics2D) g.create();
 
@@ -274,9 +284,10 @@ public class GamePanel extends Panel {
             g2d.setTransform( at);
             // Draw the image with the scaling transformation applied
             g2d.drawImage(img, xVal - newWidth / 2 , yVal - img.getHeight() / 2, null);
+
             g2d.dispose();
         }
-
+        drawStarIcon(g);
         int num = CommandCenter.getInstance().numStar;
         int max = CommandCenter.getInstance().maxStar;
         for(int i=1; i<=max; ++i){
@@ -290,10 +301,22 @@ public class GamePanel extends Panel {
     }
 
 
+    private void drawStarIcon(Graphics g){
+
+        int xVal = 370;
+        int yVal =  45;
+        BufferedImage img = loadGraphic("/imgs/powerUp/star_gold.png");
+        if(img!=null){
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.drawImage(img, xVal - img.getWidth() / 2, yVal - img.getHeight() / 2, null);
+        }
+
+    }
+
 
     private void drawOneYellowSquare(Graphics g, int offSet){
 
-        int xVal = 400 + (20 * offSet);
+        int xVal = 390 + (20 * offSet);
         int yVal =  45;
         BufferedImage img = loadGraphic("/imgs/UI/squareYellow.png");
         if (img != null){
@@ -304,7 +327,7 @@ public class GamePanel extends Panel {
 
     private void drawOneGreySquare(Graphics g, int offSet){
 
-        int xVal = 400 + (20 * offSet);
+        int xVal = 390 + (20 * offSet);
         int yVal =  45;
         BufferedImage img = loadGraphic("/imgs/UI/square_shadow.png");
         if (img != null){
@@ -322,7 +345,7 @@ public class GamePanel extends Panel {
         //rotate the ship 90 degrees
         double degrees90 = 90.0;
         int radius = 15;
-        int xVal = 10 + (40 * offSet);
+        int xVal = 40 * offSet;
         int yVal =  45;
 
         BufferedImage img = loadGraphic("/imgs/playerShip/playerLife1_blue.png");

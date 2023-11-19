@@ -110,21 +110,21 @@ public class Game implements Runnable, KeyListener {
 
 
             currentTime = System.currentTimeMillis();
-            if(currentTime%1000<40 && CommandCenter.getInstance().getNumBoss()<1){
-                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBOSS(), GameOp.Action.ADD);
-                CommandCenter.getInstance().setNumBoss(1);
-            }
-
-            if(currentTime%9000<40){
-                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack2(), GameOp.Action.ADD);
-            }
-
-            // Enqueue a new Asteroid every 8 seconds (8000 milliseconds)
-            if (currentTime - lastAsteroidSpawnTime >= 8000) {
-                CommandCenter.getInstance().getOpsQueue().enqueue(new Asteroid(0), GameOp.Action.ADD);
-                lastAsteroidSpawnTime = currentTime; // Reset the last spawn time
-
-            }
+//            if(currentTime%1000<40 && CommandCenter.getInstance().getNumBoss()<1){
+//                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBOSS(), GameOp.Action.ADD);
+//                CommandCenter.getInstance().setNumBoss(1);
+//            }
+//
+//            if(currentTime%9000<40){
+//                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack2(), GameOp.Action.ADD);
+//            }
+//
+//            // Enqueue a new Asteroid every 8 seconds (8000 milliseconds)
+//            if (currentTime - lastAsteroidSpawnTime >= 8000) {
+//                CommandCenter.getInstance().getOpsQueue().enqueue(new Asteroid(0), GameOp.Action.ADD);
+//                lastAsteroidSpawnTime = currentTime; // Reset the last spawn time
+//
+//            }
 
 
             if(lastRainTime>0 && currentTime-lastRainTime<=3000){
@@ -146,6 +146,7 @@ public class Game implements Runnable, KeyListener {
             checkFloaters();
             checkFalconFire();
             checkEnemyFire();
+            checkFoes();
 
             //keep track of the frame for development purposes
             CommandCenter.getInstance().incrementFrame();
@@ -169,7 +170,34 @@ public class Game implements Runnable, KeyListener {
 
 
 
+    // controls the foe spawning logic here
     private void checkFoes(){
+
+        int level = CommandCenter.getInstance().getLevel();
+        if(level>=5) return;
+        // traverse all kinds of foes
+        if ((Asteroid.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+            spawnBigAsteroids(1);
+        }
+        if ((EnemyBlack1.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+            CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack1(), GameOp.Action.ADD);
+        }
+        if ((EnemyBlack2.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+            CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack2(), GameOp.Action.ADD);
+        }
+        if ((EnemyBlack3.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+            CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack3(), GameOp.Action.ADD);
+        }
+        if ((EnemyBlack4.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+            CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack4(), GameOp.Action.ADD);
+        }
+        if ((EnemyBlack5.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+            CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack5(), GameOp.Action.ADD);
+        }
+        if ((EnemyYellowUFO.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+            CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyYellowUFO(), GameOp.Action.ADD);
+        }
+
 
     }
 
@@ -663,14 +691,19 @@ public class Game implements Runnable, KeyListener {
 
     private boolean isLevelClear() {
         //if there are no more Asteroids on the screen
-        boolean asteroidFree = true;
-        for (Movable movFoe : CommandCenter.getInstance().getMovFoes()) {
-            if (movFoe instanceof Asteroid) {
-                asteroidFree = false;
-                break;
-            }
-        }
-        return asteroidFree;
+//        boolean asteroidFree = true;
+//        for (Movable movFoe : CommandCenter.getInstance().getMovFoes()) {
+//            if (movFoe instanceof Asteroid) {
+//                asteroidFree = false;
+//                break;
+//            }
+//        }
+//        return asteroidFree;
+
+        // rewrite the logic to enter new level: gather 10 stars
+        return CommandCenter.getInstance().numStar==CommandCenter.getInstance().maxStar;
+
+
     }
 
     private void checkNewLevel() {
@@ -689,7 +722,7 @@ public class Game implements Runnable, KeyListener {
 
             //spawn some big new asteroids
 
-            spawnBigAsteroids(level);
+            spawnBigAsteroids(1);
             //make falcon invincible momentarily in case new asteroids spawn on top of him, and give player
             //time to adjust to new asteroids in game space.
 //            CommandCenter.getInstance().getFalcon().setShield(Falcon.INITIAL_SPAWN_TIME);

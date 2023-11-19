@@ -13,6 +13,9 @@ public class EnemyBlack1 extends EnemyShip{
 
     public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND * 2;
 
+    public static int[] SPAWN_TIME = {-1, -1,
+            Game.FRAMES_PER_SECOND * 6, Game.FRAMES_PER_SECOND * 16, Game.FRAMES_PER_SECOND * 17, Game.FRAMES_PER_SECOND * 18};
+
     public EnemyBlack1(){
 
         setRadius(80);

@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class EnemyYellowUFO extends EnemyShip{
 
+
+    public static int[] SPAWN_TIME = {-1, -1, -1, Game.FRAMES_PER_SECOND * 7, Game.FRAMES_PER_SECOND * 13, Game.FRAMES_PER_SECOND * 16};
     public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND;
 
     // here should be some 0-7 random value
