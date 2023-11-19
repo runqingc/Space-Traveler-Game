@@ -4,8 +4,15 @@ import java.awt.*;
 
 public class LaserRedRange extends Sprite{
 
-    public LaserRedRange(){
+    public final int DAMAGE = 50;
 
+    public LaserRedRange(Sprite explodingSprite){
+
+        setTeam(Team.FRIEND);
+        setCenter(explodingSprite.getCenter());
+        setDeltaX(0);
+        setDeltaY(0);
+        setRadius(50);
     }
 
     @Override

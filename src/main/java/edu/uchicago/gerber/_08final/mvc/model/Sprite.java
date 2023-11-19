@@ -166,6 +166,8 @@ public abstract class Sprite implements Movable {
             double scaleX = width * 1.0 / bufferedImage.getWidth();
             double scaleY = height * 1.0 / bufferedImage.getHeight();
 
+
+
             AffineTransform affineTransform = new AffineTransform( oldTransform );
             if ( centerX != 0 || centerY != 0 ) {
                 affineTransform.translate( centerX, centerY );

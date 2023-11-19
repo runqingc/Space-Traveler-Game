@@ -84,7 +84,7 @@ public class Falcon extends Sprite {
 
 	@Override
 	public boolean isProtected() {
-		return false;
+		return true;
 
 	}
 

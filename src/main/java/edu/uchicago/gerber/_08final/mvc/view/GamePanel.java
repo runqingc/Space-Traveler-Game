@@ -5,10 +5,12 @@ import edu.uchicago.gerber._08final.mvc.controller.Game;
 import edu.uchicago.gerber._08final.mvc.controller.Utils;
 import edu.uchicago.gerber._08final.mvc.model.*;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
@@ -196,20 +198,20 @@ public class GamePanel extends Panel {
         //playing and not paused!
         else {
 
-
             moveDrawMovables(grpOff,
                     CommandCenter.getInstance().getMovBackgrounds(),
-                    CommandCenter.getInstance().getMovFloaters(),
                     CommandCenter.getInstance().getMovFoes(),
+                    CommandCenter.getInstance().getMovFloaters(),
                     CommandCenter.getInstance().getMovFriends(),
-                    CommandCenter.getInstance().getMovDebris()
+                    CommandCenter.getInstance().getMovDebris(),
+                    CommandCenter.getInstance().getMovForegrounds()
                     );
 
 
             drawNumberShipsRemaining(grpOff);
             drawMeters(grpOff);
             drawFalconStatus(grpOff);
-
+            drawStarCollecting(grpOff);
 
         }
 
@@ -249,58 +251,98 @@ public class GamePanel extends Panel {
         }
     }
 
+    private void drawStarCollecting(Graphics g){
+
+        int xVal = 280;
+        int yVal =  90;
+        BufferedImage img = loadGraphic("/imgs/UI/glassPanel_corners.png");
+        if (img != null){
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Calculate the required width to contain all squares
+            int numSquares = CommandCenter.getInstance().maxStar;
+            int squareWidth = 40; // Assuming each square has a width of 20 pixels
+            int padding = 10; // Add some padding to the panel width
+            int newWidth = numSquares * squareWidth + padding;
+
+            // Calculate the scale factor based on the new width and the original image width
+            double scale = (double)newWidth / img.getWidth();
+
+            // Create a new AffineTransform instance for scaling
+            AffineTransform at = new AffineTransform(g2d.getTransform());
+            at.scale(scale, 0.5);
+            g2d.setTransform( at);
+            // Draw the image with the scaling transformation applied
+            g2d.drawImage(img, xVal - newWidth / 2 , yVal - img.getHeight() / 2, null);
+            g2d.dispose();
+        }
+
+        int num = CommandCenter.getInstance().numStar;
+        int max = CommandCenter.getInstance().maxStar;
+        for(int i=1; i<=max; ++i){
+            if(i<=num){
+                drawOneYellowSquare(g, i);
+            }else{
+                drawOneGreySquare(g, i);
+            }
+        }
+
+    }
+
+
+
+    private void drawOneYellowSquare(Graphics g, int offSet){
+
+        int xVal = 400 + (20 * offSet);
+        int yVal =  45;
+        BufferedImage img = loadGraphic("/imgs/UI/squareYellow.png");
+        if (img != null){
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.drawImage(img, xVal - img.getWidth() / 2, yVal - img.getHeight() / 2, null);
+        }
+    }
+
+    private void drawOneGreySquare(Graphics g, int offSet){
+
+        int xVal = 400 + (20 * offSet);
+        int yVal =  45;
+        BufferedImage img = loadGraphic("/imgs/UI/square_shadow.png");
+        if (img != null){
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.drawImage(img, xVal - img.getWidth() / 2, yVal - img.getHeight() / 2, null);
+        }
+
+    }
+
+
 
     private void drawOneShip(Graphics g, int offSet) {
 
-        g.setColor(Color.ORANGE);
 
         //rotate the ship 90 degrees
         double degrees90 = 90.0;
         int radius = 15;
-        int xVal = Game.DIM.width - (27 * offSet);
-        int yVal = Game.DIM.height - 45;
+        int xVal = 10 + (40 * offSet);
+        int yVal =  45;
 
-        //the reason we convert to polar-points is that it's much easier to rotate polar-points.
-        List<PolarPoint> polars = Utils.cartesianToPolar(pntShipsRemaining);
+        BufferedImage img = loadGraphic("/imgs/playerShip/playerLife1_blue.png");
+        if (img != null){
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.drawImage(img, xVal - img.getWidth() / 2, yVal - img.getHeight() / 2, null);
+        }
 
-        Function<PolarPoint, PolarPoint> rotatePolarBy90 =
-                pp -> new PolarPoint(
-                        pp.getR(),
-                        pp.getTheta() + Math.toRadians(degrees90) //rotated Theta
-                );
+    }
 
-        Function<PolarPoint, Point> polarToCartesian =
-                pp -> new Point(
-                        (int)  (pp.getR() * radius * Math.sin(pp.getTheta())),
-                        (int)  (pp.getR() * radius * Math.cos(pp.getTheta())));
-
-        Function<Point, Point> adjustForLocation =
-                pnt -> new Point(
-                        pnt.x + xVal,
-                        pnt.y + yVal);
-
-
-        g.drawPolygon(
-
-                polars.stream()
-                        .map(rotatePolarBy90)
-                        .map(polarToCartesian)
-                        .map(adjustForLocation)
-                        .map(pnt -> pnt.x)
-                        .mapToInt(Integer::intValue)
-                        .toArray(),
-
-                polars.stream()
-                        .map(rotatePolarBy90)
-                        .map(polarToCartesian)
-                        .map(adjustForLocation)
-                        .map(pnt -> pnt.y)
-                        .mapToInt(Integer::intValue)
-                        .toArray(),
-
-                polars.size());
-
-
+    private BufferedImage loadGraphic(String imagePath) {
+        BufferedImage bufferedImage;
+        try {
+            bufferedImage = ImageIO.read(Objects.requireNonNull(Sprite.class.getResourceAsStream(imagePath)));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            bufferedImage = null;
+        }
+        return bufferedImage;
     }
 
     private void initFontInfo() {

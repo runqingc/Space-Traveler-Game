@@ -100,17 +100,23 @@ public class Game implements Runnable, KeyListener {
 
         long currentTime;
 
+
         // this thread animates the scene
         while (Thread.currentThread() == animationThread) {
+//            if(CommandCenter.getInstance().numBoss<1){
+//                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBOSS(), GameOp.Action.ADD);
+//                ++CommandCenter.getInstance().numBoss;
+//            }
 
 
             currentTime = System.currentTimeMillis();
-            if(currentTime%8000<40){
-                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack4(), GameOp.Action.ADD);
+            if(currentTime%1000<40 && CommandCenter.getInstance().getNumBoss()<1){
+                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBOSS(), GameOp.Action.ADD);
+                CommandCenter.getInstance().setNumBoss(1);
             }
 
             if(currentTime%9000<40){
-                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack5(), GameOp.Action.ADD);
+                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack2(), GameOp.Action.ADD);
             }
 
             // Enqueue a new Asteroid every 8 seconds (8000 milliseconds)
@@ -179,6 +185,7 @@ public class Game implements Runnable, KeyListener {
         spawnGreenBoltFloater();
         spawnStarFloater();
         spawnHeartFloater();
+        spawnStarGoldFloater();
     }
 
     private void checkFalconFire(){
@@ -298,6 +305,7 @@ public class Game implements Runnable, KeyListener {
                         }
                         if(movFriend instanceof LaserRed){
                             CommandCenter.getInstance().getOpsQueue().enqueue(new LaserRedDebris((Sprite) movFriend), GameOp.Action.ADD);
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new LaserRedRange((Sprite) movFriend), GameOp.Action.ADD);
                             // apply range damage
                         }
                         if(movFriend instanceof LaserGreen){
@@ -322,7 +330,14 @@ public class Game implements Runnable, KeyListener {
                         if(movFoe2.health<=0){
                             CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
                         }
-                    }else if((movFriend instanceof LaserGreen) && (movFoe instanceof EnemyShip)){
+                    }else if((movFriend instanceof LaserRedRange && (movFoe instanceof EnemyShip))){
+                        EnemyShip movFoe2 = (EnemyShip) movFoe;
+                        LaserRedRange laserRedRange = (LaserRedRange) movFriend;
+                        movFoe2.health -= laserRedRange.DAMAGE;
+                        if(movFoe2.health<=0){
+                            CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
+                        }
+                    } else if((movFriend instanceof LaserGreen) && (movFoe instanceof EnemyShip)){
                         EnemyShip movFoe1 = (EnemyShip) movFoe;
                         LaserGreen laserGreen = (LaserGreen) movFriend;
                         movFoe1.health -= laserGreen.DAMAGE;
@@ -397,7 +412,12 @@ public class Game implements Runnable, KeyListener {
                     case "GreenBoltFloater":
                         CommandCenter.getInstance().getFalcon().maxGreenLaserNumber+=2;
                         Sound.playSound("energy-1-107099.wav");
-                    default:
+                        break;
+                    case "StarGold":
+                        if(CommandCenter.getInstance().numStar<CommandCenter.getInstance().maxStar)
+                            CommandCenter.getInstance().setNumStar(CommandCenter.getInstance().numStar+1);
+                        break;
+                        default:
                         break;
                 }
                 CommandCenter.getInstance().getOpsQueue().enqueue(movFloater, GameOp.Action.REMOVE);
@@ -468,7 +488,13 @@ public class Game implements Runnable, KeyListener {
                         CommandCenter.getInstance().getMovBackgrounds().remove(mov);
                     }
                     break;
-
+                case FOREGROUND:
+                    if (action == GameOp.Action.ADD) {
+                        CommandCenter.getInstance().getMovForegrounds().add(mov);
+                    } else { //GameOp.Operation.REMOVE
+                        CommandCenter.getInstance().getMovForegrounds().remove(mov);
+                    }
+                    break;
             }
 
         }
@@ -536,6 +562,13 @@ public class Game implements Runnable, KeyListener {
             CommandCenter.getInstance().getOpsQueue().enqueue(new HeartFloater(), GameOp.Action.ADD);
         }
     }
+
+    private void spawnStarGoldFloater(){
+        if(CommandCenter.getInstance().getFrame() % StarGold.SPAWN_STAR_GOLD ==0 ){
+            CommandCenter.getInstance().getOpsQueue().enqueue(new StarGold(), GameOp.Action.ADD);
+        }
+    }
+
 
     private void spawnNukeFloater() {
 
@@ -649,6 +682,9 @@ public class Game implements Runnable, KeyListener {
             CommandCenter.getInstance().setScore(CommandCenter.getInstance().getScore() + (10_000L * level));
             //bump the level up
             level = level + 1;
+            CommandCenter.getInstance().numStar = 0;
+
+
             CommandCenter.getInstance().setLevel(level);
 
             //spawn some big new asteroids

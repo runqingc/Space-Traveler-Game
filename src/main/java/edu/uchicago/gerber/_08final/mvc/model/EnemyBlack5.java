@@ -29,6 +29,7 @@ public class EnemyBlack5 extends EnemyShip{
 
     @Override
     public void draw(Graphics g) {
+
         renderRaster((Graphics2D) g, getRasterMap().get(0));
     }
 }

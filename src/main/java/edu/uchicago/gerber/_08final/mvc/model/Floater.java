@@ -23,6 +23,10 @@ public abstract class Floater extends Sprite {
         setDeltaY(somePosNegValue(10));
         //set random spin
         setSpin(somePosNegValue(10));
+        if(getSpin()==0){
+            setSpin(5);
+        }
+
 
         //cartesian points which define the shape of the polygon
         List<Point> listPoints = new ArrayList<>();

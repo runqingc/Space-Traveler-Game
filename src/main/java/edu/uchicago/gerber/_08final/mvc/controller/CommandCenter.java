@@ -17,6 +17,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class CommandCenter {
 
 	public  int numFalcons;
+	public int numStar;
+	public int maxStar = 10;
+	private int numBoss;
 	private  int level;
 	private  long score;
 	private  boolean paused;
@@ -32,6 +35,7 @@ public class CommandCenter {
 
 	//lists containing our movables subdivided by team
 	private final List<Movable> movBackgrounds = new LinkedList<>();
+	private final List<Movable> movForegrounds = new LinkedList<>();
 	private final List<Movable> movDebris = new LinkedList<>();
 	private final List<Movable> movFriends = new LinkedList<>();
 	private final List<Movable> movFoes = new LinkedList<>();
@@ -65,6 +69,8 @@ public class CommandCenter {
 		setPaused(false);
 		//set to one greater than number of falcons lives in your game as initFalconAndDecrementNum() also decrements
 		setNumFalcons(4);
+		setNumStar(0);
+		setNumBoss(0);
 		initFalconAndDecrementFalconNum();
 		//add the falcon to the movFriends list
 		opsQueue.enqueue(falcon, GameOp.Action.ADD);
@@ -115,6 +121,7 @@ public class CommandCenter {
 
 	private void clearAll(){
 		movBackgrounds.clear();
+		movForegrounds.clear();
 		movDebris.clear();
 		movFriends.clear();
 		movFoes.clear();

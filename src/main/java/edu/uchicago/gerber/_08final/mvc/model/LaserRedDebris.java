@@ -11,7 +11,7 @@ public class LaserRedDebris extends Sprite{
     private int index = 0;
 
     public LaserRedDebris(Sprite explodingSprite){
-        setTeam(Team.FRIEND);
+        setTeam(Team.DEBRIS);
 
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
         rasterMap.put(0, loadGraphic("/imgs/laser/laserRed11.png"));
@@ -27,10 +27,7 @@ public class LaserRedDebris extends Sprite{
         setSpin(somePosNegValue(10));
     }
 
-    @Override
-    public boolean isProtected() {
-        return true;
-    }
+
 
     @Override
     public void draw(Graphics g) {
