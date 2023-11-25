@@ -14,13 +14,17 @@ public class GreyBullet02 extends Sprite{
     // which direction will the bullet come from
     public enum BulletType{
         S,
+        SSW,
         SW,
+        SWW,
         W,
         NW,
         N,
         NE,
         E,
-        SE
+        SEE,
+        SE,
+        SSE,
     }
 
     private BulletType bulletType;
@@ -39,8 +43,7 @@ public class GreyBullet02 extends Sprite{
         rasterMap.put(0, loadGraphic("/imgs/Meteors/meteorGrey_small2.png"));
         setRasterMap(rasterMap);
 
-        double vectorX;
-        double vectorY;
+
 
         setCenter(enemyShip.getCenter());
 
@@ -49,9 +52,17 @@ public class GreyBullet02 extends Sprite{
             case S:
                 setDeltaY(FIRE_POWER);
                 break;
+            case SSW:
+                setDeltaY(FIRE_POWER*Math.cos(Math.toRadians(22.5)));
+                setDeltaX(-FIRE_POWER*Math.sin(Math.toRadians(22.5)));
+                break;
             case SW:
                 setDeltaY(FIRE_POWER*0.7071);
                 setDeltaX(-FIRE_POWER*0.7071);
+                break;
+            case SWW:
+                setDeltaY(FIRE_POWER*Math.sin(Math.toRadians(22.5)));
+                setDeltaX(-FIRE_POWER*Math.cos(Math.toRadians(22.5)));
                 break;
             case W:
                 setDeltaX(-FIRE_POWER);
@@ -70,9 +81,17 @@ public class GreyBullet02 extends Sprite{
             case E:
                 setDeltaX(FIRE_POWER);
                 break;
+            case SEE:
+                setDeltaY(FIRE_POWER*Math.sin(Math.toRadians(22.5)));
+                setDeltaX(FIRE_POWER*Math.cos(Math.toRadians(22.5)));
+                break;
             case SE:
                 setDeltaY(FIRE_POWER*0.7071);
                 setDeltaX(FIRE_POWER*0.7071);
+                break;
+            case SSE:
+                setDeltaY(FIRE_POWER*Math.cos(Math.toRadians(22.5)));
+                setDeltaX(FIRE_POWER*Math.sin(Math.toRadians(22.5)));
                 break;
             default:
                 break;

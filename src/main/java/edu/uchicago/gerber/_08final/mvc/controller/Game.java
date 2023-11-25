@@ -110,29 +110,6 @@ public class Game implements Runnable, KeyListener {
 
 
             currentTime = System.currentTimeMillis();
-//            if(currentTime%1000<40 && CommandCenter.getInstance().getNumBoss()<1){
-//                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBOSS(), GameOp.Action.ADD);
-//                CommandCenter.getInstance().setNumBoss(1);
-//            }
-//
-//            if(currentTime%9000<40){
-//                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack2(), GameOp.Action.ADD);
-//            }
-//
-//            // Enqueue a new Asteroid every 8 seconds (8000 milliseconds)
-//            if (currentTime - lastAsteroidSpawnTime >= 8000) {
-//                CommandCenter.getInstance().getOpsQueue().enqueue(new Asteroid(0), GameOp.Action.ADD);
-//                lastAsteroidSpawnTime = currentTime; // Reset the last spawn time
-//
-//            }
-
-
-            if(lastRainTime>0 && currentTime-lastRainTime<=3000){
-                for(int i=0; i<2 && System.currentTimeMillis()-startTime<=3000; ++i){
-                    CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RAIN), GameOp.Action.ADD);
-                }
-            }
-
 
 
 
@@ -141,12 +118,15 @@ public class Game implements Runnable, KeyListener {
             // see GamePanel class for details
             gamePanel.update(gamePanel.getGraphics());
 
+
             checkCollisions();
-            checkNewLevel();
+            checkBlueRain();
+            checkGreenRain();
             checkFloaters();
             checkFalconFire();
             checkEnemyFire();
             checkFoes();
+
 
             //keep track of the frame for development purposes
             CommandCenter.getInstance().incrementFrame();
@@ -169,12 +149,35 @@ public class Game implements Runnable, KeyListener {
     } // end run
 
 
+    private void checkBlueRain(){
+
+        if(lastRainTime>0 && System.currentTimeMillis()-lastRainTime<=3000){
+            for(int i=0; i<2 && System.currentTimeMillis()-lastRainTime<=3000; ++i){
+                CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.RAIN), GameOp.Action.ADD);
+            }
+        }
+
+    }
+
+    private void checkGreenRain(){
+
+        if(LaserGreenRain.POS<=Game.DIM.width/2){
+
+            CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenRain(Game.DIM.width/2 + LaserGreenRain.POS),  GameOp.Action.ADD);
+            CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenRain(Game.DIM.width/2 - LaserGreenRain.POS),  GameOp.Action.ADD);
+            LaserGreenRain.POS+=20;
+
+        }
+
+    }
+
+
 
     // controls the foe spawning logic here
     private void checkFoes(){
 
         int level = CommandCenter.getInstance().getLevel();
-        if(level>=5) return;
+        if(level>5) return;
         // traverse all kinds of foes
         if ((Asteroid.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
             spawnBigAsteroids(1);
@@ -198,12 +201,22 @@ public class Game implements Runnable, KeyListener {
             CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyYellowUFO(), GameOp.Action.ADD);
         }
 
+        if(CommandCenter.getInstance().getLevel()==5 && CommandCenter.getInstance().getNumBoss()<1){
+            EnemyBOSS enemyBOSS = new EnemyBOSS();
+            CommandCenter.getInstance().getOpsQueue().enqueue(enemyBOSS, GameOp.Action.ADD);
+            CommandCenter.getInstance().setNumBoss(1);
+            CommandCenter.getInstance().setEnemyBOSS(enemyBOSS);
+        }else{
+            System.out.println(CommandCenter.getInstance().getLevel());
+            System.out.println(CommandCenter.getInstance().getNumBoss());
+
+        }
+
 
     }
 
 
     private void checkFloaters() {
-
 
 //        spawnNewWallFloater();
         spawnShieldFloater();
@@ -301,7 +314,20 @@ public class Game implements Runnable, KeyListener {
                     CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NW), GameOp.Action.ADD);
                     CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.W), GameOp.Action.ADD);
                 }
+            } else if (movFoe instanceof EnemyBOSS) {
+                if(CommandCenter.getInstance().getFrame() % EnemyBOSS.SHOOTING_INTERVAL == 0){
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.S), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SSW), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SW), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SWW), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SE), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SSE), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.E), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SEE), GameOp.Action.ADD);
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.W), GameOp.Action.ADD);
+                }
             }
+
 
         }
     }
@@ -339,8 +365,12 @@ public class Game implements Runnable, KeyListener {
                         if(movFriend instanceof LaserGreen){
                             CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenDebris((Sprite) movFriend), GameOp.Action.ADD);
                             CommandCenter.getInstance().getFalcon().greenLaserNumber--;
-
                         }
+                        if(movFriend instanceof LaserGreenRain){
+                            CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenDebris((Sprite) movFriend), GameOp.Action.ADD);
+                        }
+
+
                     }
 
                     //remove the foe on some occasion
@@ -369,6 +399,14 @@ public class Game implements Runnable, KeyListener {
                         EnemyShip movFoe1 = (EnemyShip) movFoe;
                         LaserGreen laserGreen = (LaserGreen) movFriend;
                         movFoe1.health -= laserGreen.DAMAGE;
+                        if(movFoe1.health<=0){
+                            CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
+                        }
+                        // can add explode effect of enemy here
+                    }  else if((movFriend instanceof LaserGreenRain) && (movFoe instanceof EnemyShip)){
+                        EnemyShip movFoe1 = (EnemyShip) movFoe;
+                        LaserGreenRain laserGreenRain = (LaserGreenRain) movFriend;
+                        movFoe1.health -= laserGreenRain.DAMAGE;
                         if(movFoe1.health<=0){
                             CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
                         }
@@ -713,6 +751,10 @@ public class Game implements Runnable, KeyListener {
             int level = CommandCenter.getInstance().getLevel();
             //award some points for having cleared the previous level
             CommandCenter.getInstance().setScore(CommandCenter.getInstance().getScore() + (10_000L * level));
+
+            // will not go to next level until the user pressed N
+
+
             //bump the level up
             level = level + 1;
             CommandCenter.getInstance().numStar = 0;
@@ -720,9 +762,11 @@ public class Game implements Runnable, KeyListener {
 
             CommandCenter.getInstance().setLevel(level);
 
-            //spawn some big new asteroids
+            // spawn green rain
+            LaserGreenRain.POS = 0;
 
-            spawnBigAsteroids(1);
+
+
             //make falcon invincible momentarily in case new asteroids spawn on top of him, and give player
             //time to adjust to new asteroids in game space.
 //            CommandCenter.getInstance().getFalcon().setShield(Falcon.INITIAL_SPAWN_TIME);
@@ -808,13 +852,22 @@ public class Game implements Runnable, KeyListener {
                 Sound.playSound("thump.wav");
                 break;
             case NUKE:
-                if (CommandCenter.getInstance().getFalcon().getNukeMeter() > 0){
-                    synchronized (this) {
-                        CommandCenter.getInstance().getOpsQueue().enqueue(new Nuke(falcon), GameOp.Action.ADD);
-                    }
-                    Sound.playSound("nuke.wav");
-                    CommandCenter.getInstance().getFalcon().setNukeMeter(0);
-                }
+
+                // original logic to NUKE when pressed N
+//                if (CommandCenter.getInstance().getFalcon().getNukeMeter() > 0){
+//                    synchronized (this) {
+//                        CommandCenter.getInstance().getOpsQueue().enqueue(new Nuke(falcon), GameOp.Action.ADD);
+//                    }
+//                    Sound.playSound("nuke.wav");
+//                    CommandCenter.getInstance().getFalcon().setNukeMeter(0);
+//                }
+
+                // new logic to come to next level is N is pressed
+                checkNewLevel();
+
+
+
+
                 break;
             //releasing either the LEFT or RIGHT arrow key will set the TurnState to IDLE
             case LEFT:

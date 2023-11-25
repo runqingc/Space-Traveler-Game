@@ -13,11 +13,15 @@ public class EnemyBOSS extends EnemyShip{
 
     int direction = 1;
 
+    public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND * 2;
+
+    public final int MAX_HEALTH = 20000;
+
     public EnemyBOSS(){
 
         setRadius(100);
 
-        health = 10000;
+        health = MAX_HEALTH;
 
         setCenter(new Point(Game.DIM.width/2, -200));
 
@@ -56,10 +60,18 @@ public class EnemyBOSS extends EnemyShip{
         }
 
 
-        // Check if the LaserBlue is outside the game frame
-        if(this.getCenter().y>=200){
+        if(this.getCenter().y>=200 && this.getDeltaX()==0){
             setDeltaY(0);
+            setDeltaX(1);
         }
+        if(this.getCenter().y>=180 && this.getCenter().x<=150){
+            setDeltaX(1);
+        }
+        if(this.getCenter().y>=180 && this.getCenter().x>=Game.DIM.width-150){
+            setDeltaX(-1);
+        }
+
+
 
     }
 

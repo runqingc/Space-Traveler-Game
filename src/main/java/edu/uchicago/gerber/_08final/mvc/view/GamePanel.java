@@ -118,7 +118,7 @@ public class GamePanel extends Panel {
         List<String> statusArray = new ArrayList<>();
 //        if (CommandCenter.getInstance().getLevel() >= 0) statusArray.add(levelText);
         if (CommandCenter.getInstance().getFalcon().isMaxSpeedAttained()) statusArray.add("WARNING - SLOW DOWN");
-        if (CommandCenter.getInstance().getFalcon().getNukeMeter() > 0) statusArray.add("PRESS N for NUKE");
+        if (CommandCenter.getInstance().numStar == CommandCenter.getInstance().maxStar) statusArray.add("MAX ACHIEVED! PRESS N TO NEXT LEVEL! ");
 
 
 
@@ -183,7 +183,7 @@ public class GamePanel extends Panel {
         if (CommandCenter.getInstance().isGameOver()) {
             displayTextOnScreen(grpOff,
                     "GAME OVER",
-                    "use the arrow keys to turn and thrust",
+                    "use the arrow keys to turn left/right/up/down",
                     "use the space bar to fire",
                     "'S' to Start",
                     "'P' to Pause",
@@ -214,6 +214,7 @@ public class GamePanel extends Panel {
             drawMeters(grpOff);
             drawFalconStatus(grpOff);
             drawStarCollecting(grpOff);
+            drawBossHealth(grpOff);
 
         }
 
@@ -299,6 +300,94 @@ public class GamePanel extends Panel {
         }
 
     }
+
+    private void drawBossHealth(Graphics g){
+
+        if(CommandCenter.getInstance().getEnemyBOSS()==null || CommandCenter.getInstance().getEnemyBOSS().health<=0) return;
+        drawHealthBackground(g);
+        drawHealthRemain(g);
+
+    }
+
+    private void drawHealthBackground(Graphics g){
+
+        int xVal = 1000;
+        int yVal =  100;
+        BufferedImage top = loadGraphic("/imgs/UI/barVertical_white_top.png");
+        BufferedImage mid = loadGraphic("/imgs/UI/barVertical_white_mid.png");
+        BufferedImage btm = loadGraphic("/imgs/UI/barVertical_white_bottom.png");
+
+        if (top != null && mid != null && btm != null) {
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Draw the top part of the health bar
+            g2d.drawImage(top, xVal - top.getWidth() / 2, yVal - top.getHeight() / 2, null);
+            yVal += top.getHeight();
+
+            // Scale and draw the middle part of the health bar
+            // Let's say you want to make it 1.5 times wider, and 600 pixels in height
+            int scaledMidWidth = (int) (mid.getWidth() * 1.5);
+            int scaledMidHeight = 600; // Desired height
+            BufferedImage scaledMid = new BufferedImage(scaledMidWidth, scaledMidHeight, mid.getType());
+            Graphics2D g2dMid = scaledMid.createGraphics();
+            g2dMid.drawImage(mid, 0, 0, scaledMidWidth, scaledMidHeight, null);
+            g2dMid.dispose();
+            g2d.drawImage(scaledMid, xVal - scaledMidWidth / 2, yVal - top.getHeight() / 2, null);
+            yVal += scaledMidHeight;
+
+            // Draw the bottom part of the health bar
+            g2d.drawImage(btm, xVal - btm.getWidth() / 2, yVal - btm.getHeight() / 2, null);
+
+            // Clean up
+            g2d.dispose();
+        }
+
+    }
+
+
+    private void drawHealthRemain(Graphics g) {
+        int totalHealth = CommandCenter.getInstance().getEnemyBOSS().MAX_HEALTH;
+        int healthRemain = CommandCenter.getInstance().getEnemyBOSS().health;
+
+        int xVal = 1000;
+        int yVal = 100;
+        BufferedImage top = loadGraphic("/imgs/UI/barVertical_red_top.png");
+        BufferedImage mid = loadGraphic("/imgs/UI/barVertical_red_mid.png");
+        BufferedImage btm = loadGraphic("/imgs/UI/barVertical_red_bottom.png");
+
+        if (top != null && mid != null && btm != null) {
+            final int healthBarWidth = (int) (mid.getWidth() * 1.5);
+            // Calculate the height of the health remaining portion based on the health ratio
+            final int totalBarHeight = 600; // Total height of the health bar, set it according to your design
+            int healthBarHeight = (int) (((double) healthRemain / totalHealth) * totalBarHeight);
+
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Draw the bottom part of the health bar first
+            yVal += totalBarHeight+btm.getHeight(); // Start from the bottom of where the bar should end
+            g2d.drawImage(btm, xVal - btm.getWidth() / 2, yVal - btm.getHeight() / 2, null);
+            yVal -= btm.getHeight();
+
+            // Draw the middle part (health remaining)
+            if (healthBarHeight > 0) { // Only draw if there is health remaining
+                BufferedImage healthBar = new BufferedImage(healthBarWidth, totalBarHeight, mid.getType());
+                Graphics2D g2Health = healthBar.createGraphics();
+                g2Health.drawImage(mid, 0, totalBarHeight - healthBarHeight, healthBarWidth, healthBarHeight, null);
+                g2Health.dispose();
+                g2d.drawImage(healthBar, xVal - healthBarWidth / 2, yVal - totalBarHeight + btm.getHeight(), null);
+            }
+
+            // Draw the top part of the health bar last, so it's on top of the middle part
+            yVal -= healthBarHeight-btm.getHeight(); // Move up to the top of the bar
+            g2d.drawImage(top, xVal - top.getWidth() / 2, yVal - top.getHeight() / 2, null);
+
+            // Clean up
+            g2d.dispose();
+        }
+    }
+
+
+
 
 
     private void drawStarIcon(Graphics g){

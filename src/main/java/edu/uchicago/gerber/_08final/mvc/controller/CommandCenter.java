@@ -20,6 +20,7 @@ public class CommandCenter {
 	public int numStar;
 	public int maxStar = 15;
 	private int numBoss;
+	private EnemyBOSS enemyBOSS = null;
 	private  int level;
 	private  long score;
 	private  boolean paused;

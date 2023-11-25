@@ -18,7 +18,7 @@ public class Asteroid extends Sprite {
 	//radius of a large asteroid
 	private final int LARGE_RADIUS = 110;
 
-	public static int[] SPAWN_TIME = {Game.FRAMES_PER_SECOND * 10, Game.FRAMES_PER_SECOND * 10,
+	public static int[] SPAWN_TIME = {Game.FRAMES_PER_SECOND * 15, Game.FRAMES_PER_SECOND * 12,
 			Game.FRAMES_PER_SECOND * 10, Game.FRAMES_PER_SECOND * 10, Game.FRAMES_PER_SECOND * 10, Game.FRAMES_PER_SECOND * 12};
 
 	private int pictureIndex = 0;
