@@ -2,9 +2,9 @@ package edu.uchicago.gerber._08final.mvc.model;
 
 import java.awt.*;
 
-public class LaserRedRange extends Sprite{
+public class LaserRedRange extends Laser{
 
-    public final int DAMAGE = 50;
+
 
     public LaserRedRange(Sprite explodingSprite){
 
@@ -13,6 +13,7 @@ public class LaserRedRange extends Sprite{
         setDeltaX(0);
         setDeltaY(0);
         setRadius(50);
+        DAMAGE = 50;
     }
 
     @Override

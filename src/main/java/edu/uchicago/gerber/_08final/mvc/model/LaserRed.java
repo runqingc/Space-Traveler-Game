@@ -8,11 +8,10 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LaserRed extends Sprite{
+public class LaserRed extends Laser{
 
     private int index = 0;
 
-    public final int DAMAGE = 50;
 
     // every 1 second fire once
     public static final int RED_FIRE_INTERVAL=Game.FRAMES_PER_SECOND;
@@ -32,6 +31,7 @@ public class LaserRed extends Sprite{
         setTeam(Team.FRIEND);
         laserType = type;
         setRadius(20);
+        DAMAGE = 50;
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
         rasterMap.put(0, loadGraphic("/imgs/laser/laserRed04.png"));
         rasterMap.put(1, loadGraphic("/imgs/laser/laserRed06.png"));

@@ -8,10 +8,10 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LaserGreenRain extends Sprite{
+public class LaserGreenRain extends Laser{
 
 
-    public final int DAMAGE = 20;
+
 
     public static int POS = Game.DIM.width;
 
@@ -22,6 +22,8 @@ public class LaserGreenRain extends Sprite{
 
         setRadius(15); // Size of the laser
 
+        DAMAGE = 200;
+
         setOrientation(0); // Start angle
 
         // Load the green laser image
@@ -31,7 +33,7 @@ public class LaserGreenRain extends Sprite{
 
         setCenter(new Point(x, Game.DIM.height-10));
 
-        setDeltaY(-20);
+        setDeltaY(-10);
     }
 
     private boolean isOutOfFrame() {

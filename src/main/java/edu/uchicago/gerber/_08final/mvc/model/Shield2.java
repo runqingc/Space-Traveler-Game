@@ -1,5 +1,8 @@
 package edu.uchicago.gerber._08final.mvc.model;
 
+import edu.uchicago.gerber._08final.mvc.controller.CommandCenter;
+import edu.uchicago.gerber._08final.mvc.controller.GameOp;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -25,6 +28,8 @@ public class Shield2 extends Sprite{
         setExpiry(flaoterProtectTime);
         setCenter(falcon.getCenter());
     }
+
+
 
     @Override
     public void draw(Graphics g) {

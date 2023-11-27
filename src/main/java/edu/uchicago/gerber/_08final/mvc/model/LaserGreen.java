@@ -8,21 +8,21 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LaserGreen extends Sprite {
+public class LaserGreen extends Laser {
 
     private double orbitRadius; // The radius of the orbit
     private Falcon falcon; // The Falcon object that the laser orbits around
 
-    public final int DAMAGE = 20;
 
-    public static final int GREEN_FIRE_INTERVAL= Game.FRAMES_PER_SECOND *2;
+
+    public static final int GREEN_FIRE_INTERVAL= Game.FRAMES_PER_SECOND ;
 
     public LaserGreen(Falcon falcon) {
         this.falcon = falcon;
         ++falcon.greenLaserNumber;
         setTeam(Team.FRIEND);
         setRadius(15); // Size of the laser
-
+        DAMAGE = 20;
         orbitRadius = 100; // Set the radius of the orbit
         setOrientation(0); // Start angle
 

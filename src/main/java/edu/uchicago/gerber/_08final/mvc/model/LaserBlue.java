@@ -8,12 +8,12 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LaserBlue extends Sprite{
+public class LaserBlue extends Laser{
 
 
     private int index = 0;
 
-    public final int DAMAGE = 20;
+
 
     public static final int BLUE_FIRE_INTERVAL=Game.FRAMES_PER_SECOND/2;
 
@@ -32,6 +32,7 @@ public class LaserBlue extends Sprite{
         setTeam(Team.FRIEND);
         laserType = type;
         setRadius(5);
+        DAMAGE = 20;
 
         Map<Integer, BufferedImage> rasterMap = new HashMap<>();
         rasterMap.put(0, loadGraphic("/imgs/laser/laserBlue04.png"));

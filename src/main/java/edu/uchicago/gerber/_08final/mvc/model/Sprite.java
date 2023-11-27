@@ -114,6 +114,9 @@ public abstract class Sprite implements Movable {
         //opsList with an operation of REMOVE
         if (expiry == 1) {
             CommandCenter.getInstance().getOpsQueue().enqueue(this, GameOp.Action.REMOVE);
+            if(this instanceof Shield2){
+                CommandCenter.getInstance().getFalcon().setProtected(false);
+            }
         }
         //and then decrements in all cases
         expiry--;

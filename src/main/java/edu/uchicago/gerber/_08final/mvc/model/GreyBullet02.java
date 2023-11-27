@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GreyBullet02 extends Sprite{
+public class GreyBullet02 extends EnemyShip{
 
     final double FIRE_POWER = 15.0;
 
@@ -32,6 +32,8 @@ public class GreyBullet02 extends Sprite{
     public GreyBullet02(EnemyShip enemyShip, BulletType bulletType){
 
         setTeam(Team.FOE);
+
+        health = 20;
 
         setRadius(20);
 

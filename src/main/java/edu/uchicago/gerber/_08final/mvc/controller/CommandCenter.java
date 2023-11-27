@@ -24,7 +24,7 @@ public class CommandCenter {
 	private  int level;
 	private  long score;
 	private  boolean paused;
-	private  boolean muted;
+	private  boolean muted = false;
 
 	//this value is used to count the number of frames (full animation cycles) in the game
 	private long frame;
@@ -73,6 +73,7 @@ public class CommandCenter {
 		setNumStar(0);
 		setNumBoss(0);
 		initFalconAndDecrementFalconNum();
+//		setMuted(false);
 		//add the falcon to the movFriends list
 		opsQueue.enqueue(falcon, GameOp.Action.ADD);
 		for (int i = 0; i < 150; i++) {  // Adjust number of stars as needed
@@ -102,7 +103,8 @@ public class CommandCenter {
 		falcon.setInvisible(Falcon.INITIAL_SPAWN_TIME/4);
 		// set initial laser level
 		falcon.setLaserLevel(1);
-
+		falcon.setRedLaserLevel(0);
+		falcon.setMaxGreenLaserNumber(2);
 		CommandCenter.getInstance().getOpsQueue().enqueue(new Shield2(CommandCenter.getInstance().getFalcon()), GameOp.Action.ADD);
 		//put falcon in the middle of the game-space
 		falcon.setCenter(new Point(Game.DIM.width / 2, Game.DIM.height / 5 *4));

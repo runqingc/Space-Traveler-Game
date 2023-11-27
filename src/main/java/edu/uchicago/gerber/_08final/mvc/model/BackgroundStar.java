@@ -32,8 +32,6 @@ public class BackgroundStar extends Sprite{
     @Override
     public void draw(Graphics g) {
 
-
-
         g.setColor(color);
         g.fillOval(getCenter().x, getCenter().y, getRadius(), getRadius());
 

@@ -11,6 +11,9 @@ import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.Random;
 
+import static edu.uchicago.gerber._08final.mvc.model.HintArrowControl.SPAWN_HINT;
+import static edu.uchicago.gerber._08final.mvc.model.HintArrowControl.appeared;
+
 
 // ===============================================
 // == This Game class is the CONTROLLER
@@ -54,7 +57,7 @@ public class Game implements Runnable, KeyListener {
     // SPECIAL = 70; 					// fire special weapon;  F key
 
     private final Clip soundThrust;
-    private final Clip soundBackground;
+    private Clip soundBackground;
 
     long lastRainTime = -1;
 
@@ -67,8 +70,8 @@ public class Game implements Runnable, KeyListener {
         gamePanel = new GamePanel(DIM);
         gamePanel.addKeyListener(this); //Game object implements KeyListener
         soundThrust = Sound.clipForLoopFactory("whitenoise.wav");
-        soundBackground = Sound.clipForLoopFactory("music-background.wav");
-
+        soundBackground = Sound.clipForLoopFactory("bgm.wav");
+        soundBackground.loop(Clip.LOOP_CONTINUOUSLY);
         //fire up the animation thread
         animationThread = new Thread(this); // pass the animation thread a runnable object, the Game object
         animationThread.start();
@@ -95,37 +98,28 @@ public class Game implements Runnable, KeyListener {
 
         // and get the current time
         long startTime = System.currentTimeMillis();
-        long lastAsteroidSpawnTime = startTime;
-        long lastFireTime = startTime;
 
-        long currentTime;
 
 
         // this thread animates the scene
         while (Thread.currentThread() == animationThread) {
-//            if(CommandCenter.getInstance().numBoss<1){
-//                CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBOSS(), GameOp.Action.ADD);
-//                ++CommandCenter.getInstance().numBoss;
-//            }
-
-
-            currentTime = System.currentTimeMillis();
-
-
 
 
             //this call will cause all movables to move() and draw() themselves every ~40ms
             // see GamePanel class for details
             gamePanel.update(gamePanel.getGraphics());
 
+            if(!CommandCenter.getInstance().isGameOver() && !CommandCenter.getInstance().isPaused()){
+                checkHint();
+                checkCollisions();
+                checkBlueRain();
+                checkGreenRain();
+                checkFloaters();
+                checkFalconFire();
+                checkEnemyFire();
+                checkFoes();
 
-            checkCollisions();
-            checkBlueRain();
-            checkGreenRain();
-            checkFloaters();
-            checkFalconFire();
-            checkEnemyFire();
-            checkFoes();
+            }
 
 
             //keep track of the frame for development purposes
@@ -148,6 +142,18 @@ public class Game implements Runnable, KeyListener {
         } // end while
     } // end run
 
+    private void checkHint(){
+
+        if(HintArrowControl.index<=2 && CommandCenter.getInstance().getFrame() % HintArrowControl.SPAWN_HINT==0){
+            if(HintArrowControl.SPAWN_HINT<=Game.FRAMES_PER_SECOND ){
+                HintArrowControl.SPAWN_HINT = Game.FRAMES_PER_SECOND*10;
+            }
+            CommandCenter.getInstance().getOpsQueue().enqueue(new HintArrowControl(), GameOp.Action.ADD);
+            HintArrowControl.index++;
+        }
+
+    }
+
 
     private void checkBlueRain(){
 
@@ -165,8 +171,10 @@ public class Game implements Runnable, KeyListener {
 
             CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenRain(Game.DIM.width/2 + LaserGreenRain.POS),  GameOp.Action.ADD);
             CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenRain(Game.DIM.width/2 - LaserGreenRain.POS),  GameOp.Action.ADD);
+            if(LaserGreenRain.POS+20>Game.DIM.width/2){
+                CommandCenter.getInstance().getOpsQueue().enqueue(new LevelUp(),  GameOp.Action.ADD);
+            }
             LaserGreenRain.POS+=20;
-
         }
 
     }
@@ -206,6 +214,9 @@ public class Game implements Runnable, KeyListener {
             CommandCenter.getInstance().getOpsQueue().enqueue(enemyBOSS, GameOp.Action.ADD);
             CommandCenter.getInstance().setNumBoss(1);
             CommandCenter.getInstance().setEnemyBOSS(enemyBOSS);
+            stopLoopingSounds(soundBackground);
+            soundBackground = Sound.clipForLoopFactory("reduced_boss.wav");
+            soundBackground.loop(Clip.LOOP_CONTINUOUSLY);
         }else{
             System.out.println(CommandCenter.getInstance().getLevel());
             System.out.println(CommandCenter.getInstance().getNumBoss());
@@ -340,6 +351,9 @@ public class Game implements Runnable, KeyListener {
         Point pntFriendCenter, pntFoeCenter;
         int radFriend, radFoe;
 
+
+
+
         //This has order-of-growth of O(n^2), there is no way around this.
         for (Movable movFriend : CommandCenter.getInstance().getMovFriends()) {
             for (Movable movFoe : CommandCenter.getInstance().getMovFoes()) {
@@ -350,7 +364,17 @@ public class Game implements Runnable, KeyListener {
                 radFoe = movFoe.getRadius();
 
                 //detect collision
-                if (pntFriendCenter.distance(pntFoeCenter) < (radFriend + radFoe)) {
+                // BOSS has special shape, so it will be dealt with separately
+                if (pntFriendCenter.distance(pntFoeCenter) < (radFriend + radFoe)
+
+                        || (movFoe instanceof EnemyBOSS && Math.abs(movFriend.getCenter().y-CommandCenter.getInstance().getEnemyBOSS().getCenter().y)<=25
+                        && Math.abs(movFriend.getCenter().x-CommandCenter.getInstance().getEnemyBOSS().getCenter().x)<=310)
+
+                ) {
+                    if(movFoe instanceof Asteroid){
+                        CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
+                    }
+
                     //remove the friend (so long as he is not protected)
                     if (!movFriend.isProtected()) {
                         CommandCenter.getInstance().getOpsQueue().enqueue(movFriend, GameOp.Action.REMOVE);
@@ -370,50 +394,27 @@ public class Game implements Runnable, KeyListener {
                             CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenDebris((Sprite) movFriend), GameOp.Action.ADD);
                         }
 
+                        //remove the foe on some occasion
+                        // Inside your collision detection logic
+                        if (movFoe instanceof EnemyShip) {
+                            EnemyShip enemyShip = (EnemyShip) movFoe;
+                            if (movFriend instanceof LaserBlue) {
+                                handleLaserEnemyCollision((LaserBlue) movFriend, enemyShip);
+                            } else if (movFriend instanceof LaserRed) {
+                                handleLaserEnemyCollision((LaserRed) movFriend, enemyShip);
+                            } else if (movFriend instanceof LaserRedRange) {
+                                handleLaserEnemyCollision((LaserRedRange) movFriend, enemyShip);
+                            } else if (movFriend instanceof LaserGreen) {
+                                handleLaserEnemyCollision((LaserGreen) movFriend, enemyShip);
+                            } else if (movFriend instanceof LaserGreenRain) {
+                                handleLaserEnemyCollision((LaserGreenRain) movFriend, enemyShip);
+                            }
+                            // ... Add other laser types if needed
+                        }
+
 
                     }
-
-                    //remove the foe on some occasion
-                    if((movFriend instanceof LaserBlue) && (movFoe instanceof EnemyShip)){
-                        EnemyShip movFoe1 = (EnemyShip) movFoe;
-                        LaserBlue laserBlue = (LaserBlue) movFriend;
-                        movFoe1.health -= laserBlue.DAMAGE;
-                        if(movFoe1.health<=0){
-                            CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
-                        }
-                    }else if((movFriend instanceof LaserRed) && (movFoe instanceof EnemyShip)){
-                        EnemyShip movFoe2 = (EnemyShip) movFoe;
-                        LaserRed laserRed = (LaserRed) movFriend;
-                        movFoe2.health -= laserRed.DAMAGE;
-                        if(movFoe2.health<=0){
-                            CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
-                        }
-                    }else if((movFriend instanceof LaserRedRange && (movFoe instanceof EnemyShip))){
-                        EnemyShip movFoe2 = (EnemyShip) movFoe;
-                        LaserRedRange laserRedRange = (LaserRedRange) movFriend;
-                        movFoe2.health -= laserRedRange.DAMAGE;
-                        if(movFoe2.health<=0){
-                            CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
-                        }
-                    } else if((movFriend instanceof LaserGreen) && (movFoe instanceof EnemyShip)){
-                        EnemyShip movFoe1 = (EnemyShip) movFoe;
-                        LaserGreen laserGreen = (LaserGreen) movFriend;
-                        movFoe1.health -= laserGreen.DAMAGE;
-                        if(movFoe1.health<=0){
-                            CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
-                        }
-                        // can add explode effect of enemy here
-                    }  else if((movFriend instanceof LaserGreenRain) && (movFoe instanceof EnemyShip)){
-                        EnemyShip movFoe1 = (EnemyShip) movFoe;
-                        LaserGreenRain laserGreenRain = (LaserGreenRain) movFriend;
-                        movFoe1.health -= laserGreenRain.DAMAGE;
-                        if(movFoe1.health<=0){
-                            CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
-                        }
-                        // can add explode effect of enemy here
-                    } else{
-                        CommandCenter.getInstance().getOpsQueue().enqueue(movFoe, GameOp.Action.REMOVE);
-                    }
+                    // else: is friend is protected, do nothing
 
 
 
@@ -423,7 +424,7 @@ public class Game implements Runnable, KeyListener {
                         Sound.playSound("rock.wav");
                     } else {
                         CommandCenter.getInstance().setScore(CommandCenter.getInstance().getScore() + 10);
-                        Sound.playSound("kapow.wav");
+                        Sound.playSound("reduced_kapow.wav");
                     }
                 }
 
@@ -461,15 +462,15 @@ public class Game implements Runnable, KeyListener {
                     case "BoltFloater":
                         // haven't chosen sound yet
                         CommandCenter.getInstance().getFalcon().setLaserLevel(CommandCenter.getInstance().getFalcon().getLaserLevel()+1);
-                        Sound.playSound("energy-1-107099.wav");
+                        Sound.playSound("energy-3-107098.wav");
                         break;
                     case "RedBoltFloater":
                         CommandCenter.getInstance().getFalcon().setRedLaserLevel(CommandCenter.getInstance().getFalcon().getLaserLevel()+1);
-                        Sound.playSound("energy-1-107099.wav");
+                        Sound.playSound("energy-3-107098.wav");
                         break;
                     case "StarFloater":
                         lastRainTime = System.currentTimeMillis();
-                        Sound.playSound("energy-2-90733.wav");
+                        Sound.playSound("energy-3-107098.wav");
                         break;
                     case "HeartFloater":
                         CommandCenter.getInstance().numFalcons++;
@@ -477,11 +478,12 @@ public class Game implements Runnable, KeyListener {
                         break;
                     case "GreenBoltFloater":
                         CommandCenter.getInstance().getFalcon().maxGreenLaserNumber+=2;
-                        Sound.playSound("energy-1-107099.wav");
+                        Sound.playSound("energy-3-107098.wav.wav");
                         break;
                     case "StarGold":
                         if(CommandCenter.getInstance().numStar<CommandCenter.getInstance().maxStar)
                             CommandCenter.getInstance().setNumStar(CommandCenter.getInstance().numStar+1);
+                        Sound.playSound("energy-1-107099.wav");
                         break;
                         default:
                         break;
@@ -493,6 +495,15 @@ public class Game implements Runnable, KeyListener {
         processGameOpsQueue();
 
     }//end meth
+
+
+    private void handleLaserEnemyCollision(Laser laser, EnemyShip enemyShip) {
+        enemyShip.health -= laser.DAMAGE;
+        if (enemyShip.health <= 0) {
+            CommandCenter.getInstance().getOpsQueue().enqueue(enemyShip, GameOp.Action.REMOVE);
+            CommandCenter.getInstance().getOpsQueue().enqueue(new RedCloudDebris(enemyShip), GameOp.Action.ADD);
+        }
+    }
 
 
     //This method adds and removes movables to/from their respective linked-lists.
@@ -517,6 +528,10 @@ public class Game implements Runnable, KeyListener {
                     } else { //GameOp.Operation.REMOVE
                         CommandCenter.getInstance().getMovFoes().remove(mov);
                         if (mov instanceof Asteroid) spawnSmallerAsteroidsOrDebris((Asteroid) mov);
+                        if (mov instanceof EnemyShip){
+                            EnemyShip enemyShip = (EnemyShip) mov;
+                            CommandCenter.getInstance().setScore(CommandCenter.getInstance().getScore()+enemyShip.health);
+                        }
                     }
 
                     break;
@@ -679,7 +694,7 @@ public class Game implements Runnable, KeyListener {
                     CommandCenter.getInstance().getOpsQueue().enqueue(new LaserBlue(CommandCenter.getInstance().getFalcon(), LaserBlue.LaserType.LEFT), GameOp.Action.ADD);
                 }
             }
-            Sound.playSound("laser.wav");
+            Sound.playSound("reduced_laser.wav");
         }
 
     }
@@ -751,20 +766,21 @@ public class Game implements Runnable, KeyListener {
             int level = CommandCenter.getInstance().getLevel();
             //award some points for having cleared the previous level
             CommandCenter.getInstance().setScore(CommandCenter.getInstance().getScore() + (10_000L * level));
-
+            Sound.playSound("success-1-6297.wav");
             // will not go to next level until the user pressed N
 
 
             //bump the level up
-            level = level + 1;
+            if(level<5){
+                level = level + 1;
+                CommandCenter.getInstance().setLevel(level);
+            }
             CommandCenter.getInstance().numStar = 0;
 
 
-            CommandCenter.getInstance().setLevel(level);
 
             // spawn green rain
             LaserGreenRain.POS = 0;
-
 
 
             //make falcon invincible momentarily in case new asteroids spawn on top of him, and give player
@@ -846,10 +862,11 @@ public class Game implements Runnable, KeyListener {
 
         switch (keyCode) {
             case FIRE:
-                synchronized (this){
-                    CommandCenter.getInstance().getOpsQueue().enqueue(new Bullet(falcon), GameOp.Action.ADD);
-                }
-                Sound.playSound("thump.wav");
+//                synchronized (this){
+//                    CommandCenter.getInstance().getOpsQueue().enqueue(new Bullet(falcon), GameOp.Action.ADD);
+//                }
+//                Sound.playSound("thump.wav");
+                checkNewLevel();
                 break;
             case NUKE:
 
@@ -863,9 +880,6 @@ public class Game implements Runnable, KeyListener {
 //                }
 
                 // new logic to come to next level is N is pressed
-                checkNewLevel();
-
-
 
 
                 break;
@@ -883,12 +897,12 @@ public class Game implements Runnable, KeyListener {
 
             case MUTE:
                 CommandCenter.getInstance().setMuted(!CommandCenter.getInstance().isMuted());
-
                 if (!CommandCenter.getInstance().isMuted()) {
                     stopLoopingSounds(soundBackground);
                 } else {
                     soundBackground.loop(Clip.LOOP_CONTINUOUSLY);
                 }
+
                 break;
 
             default:

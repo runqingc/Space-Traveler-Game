@@ -91,7 +91,7 @@ public class GamePanel extends Panel {
         initFontInfo();
         gameFrame.setSize(dim);
         //change the name of the game-frame to your game name
-        gameFrame.setTitle("Game Base");
+        gameFrame.setTitle("The Space Traveler");
         gameFrame.setResizable(false);
         gameFrame.setVisible(true);
         setFocusable(true);
@@ -118,7 +118,17 @@ public class GamePanel extends Panel {
         List<String> statusArray = new ArrayList<>();
 //        if (CommandCenter.getInstance().getLevel() >= 0) statusArray.add(levelText);
         if (CommandCenter.getInstance().getFalcon().isMaxSpeedAttained()) statusArray.add("WARNING - SLOW DOWN");
-        if (CommandCenter.getInstance().numStar == CommandCenter.getInstance().maxStar) statusArray.add("MAX ACHIEVED! PRESS N TO NEXT LEVEL! ");
+        if (CommandCenter.getInstance().numStar == CommandCenter.getInstance().maxStar){
+//            if(CommandCenter.getInstance().getLevel()<5){
+//
+//
+//
+//                statusArray.add("MAX NUMBER STAR ACHIEVED! PRESS SPACE TO ENTER NEXT LEVEL AND GREEN LASERS RAIN! ");
+//            }else{
+//                statusArray.add("MAX NUMBER STAR ACHIEVED! PRESS SPACE TO LAUNCH GREEN LASERS RAIN! ");
+//            }
+            drawLevelUpHint(graphics);
+        }
 
 
 
@@ -126,8 +136,24 @@ public class GamePanel extends Panel {
         if (!statusArray.isEmpty())
             displayTextOnScreen(graphics, statusArray.toArray(new String[0]));
 
+    }
 
 
+    private void drawLevelUpHint(Graphics g){
+        BufferedImage img = loadGraphic("/imgs/UI/Hint4.png");
+
+        // change the Hint UI
+        if (img != null){
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            int xVal = Game.DIM.width /2;
+            int yVal = Game.DIM.height /2;
+
+            // Draw the image with the scaling transformation applied
+            g2d.drawImage(img, xVal - img.getWidth() / 2 , yVal - img.getHeight() / 2, null);
+
+            g2d.dispose();
+        }
     }
 
     //this is used for development, you can remove it from your final game
@@ -469,6 +495,14 @@ public class GamePanel extends Panel {
 
     // This method draws some text to the middle of the screen
     private void displayTextOnScreen(final Graphics graphics, String... lines) {
+
+        // Set the larger font size here
+        Font largerFont = new Font("SansSerif", Font.BOLD, 24); // For example, size 24
+        graphics.setFont(largerFont);
+
+        // Get the new font metrics after setting the larger font
+        FontMetrics fontMetrics = graphics.getFontMetrics(largerFont);
+        int fontHeight = fontMetrics.getHeight();
 
         //AtomicInteger is safe to pass into a stream
         final AtomicInteger spacer = new AtomicInteger(0);
