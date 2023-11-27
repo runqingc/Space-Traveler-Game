@@ -18,7 +18,7 @@ public class LevelUp extends Sprite{
 
         setCenter(new Point(Game.DIM.width/2, Game.DIM.height));
 
-        setDeltaY(-10git);
+        setDeltaY(-10);
 
     }
 
