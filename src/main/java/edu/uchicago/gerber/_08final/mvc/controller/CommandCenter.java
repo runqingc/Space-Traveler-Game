@@ -21,6 +21,7 @@ public class CommandCenter {
 	public int maxStar = 15;
 	private int numBoss;
 	private EnemyBOSS enemyBOSS = null;
+	private HintArrowControl mainHint = null;
 	private  int level;
 	private  long score;
 	private  boolean paused;
@@ -69,7 +70,7 @@ public class CommandCenter {
 		setScore(0);
 		setPaused(false);
 		//set to one greater than number of falcons lives in your game as initFalconAndDecrementNum() also decrements
-		setNumFalcons(6);
+		setNumFalcons(5);
 		setNumStar(0);
 		setNumBoss(0);
 		initFalconAndDecrementFalconNum();

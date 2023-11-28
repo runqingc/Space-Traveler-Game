@@ -11,7 +11,7 @@ import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.Random;
 
-import static edu.uchicago.gerber._08final.mvc.model.HintArrowControl.SPAWN_HINT;
+
 import static edu.uchicago.gerber._08final.mvc.model.HintArrowControl.appeared;
 
 
@@ -144,11 +144,10 @@ public class Game implements Runnable, KeyListener {
 
     private void checkHint(){
 
-        if(HintArrowControl.index<=2 && CommandCenter.getInstance().getFrame() % HintArrowControl.SPAWN_HINT==0){
-            if(HintArrowControl.SPAWN_HINT<=Game.FRAMES_PER_SECOND ){
-                HintArrowControl.SPAWN_HINT = Game.FRAMES_PER_SECOND*10;
-            }
-            CommandCenter.getInstance().getOpsQueue().enqueue(new HintArrowControl(), GameOp.Action.ADD);
+        if(HintArrowControl.index<=2 && (CommandCenter.getInstance().getMainHint()==null ||CommandCenter.getInstance().getMainHint().getCenter().y>=300)){
+            HintArrowControl thisHint = new HintArrowControl();
+            CommandCenter.getInstance().getOpsQueue().enqueue(thisHint, GameOp.Action.ADD);
+            CommandCenter.getInstance().setMainHint(thisHint);
             HintArrowControl.index++;
         }
 

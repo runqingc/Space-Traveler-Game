@@ -14,7 +14,7 @@ public class HintArrowControl extends Hint{
 
     public static int index = 0;
 
-    public static int SPAWN_HINT = Game.FRAMES_PER_SECOND ;
+//    public static int SPAWN_HINT = Game.FRAMES_PER_SECOND ;
 
     private int thisIndex;
     public HintArrowControl(){
@@ -29,7 +29,6 @@ public class HintArrowControl extends Hint{
     @Override
     public void draw(Graphics g) {
         BufferedImage img = getRasterMap().get(thisIndex);
-
         if (img != null){
 
             renderHintRaster((Graphics2D) g, img);

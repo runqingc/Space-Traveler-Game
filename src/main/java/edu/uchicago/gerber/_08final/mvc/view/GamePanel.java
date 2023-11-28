@@ -207,16 +207,21 @@ public class GamePanel extends Panel {
         drawNumFrame(grpOff);
 
         if (CommandCenter.getInstance().isGameOver()) {
-            displayTextOnScreen(grpOff,
-                    "GAME OVER",
-                    "use the arrow keys to turn left/right/up/down",
-                    "use the space bar to fire",
-                    "'S' to Start",
-                    "'P' to Pause",
-                    "'Q' to Quit",
-                    "'M' to toggle music"
 
-            );
+            drawMainEntrance(grpOff);
+
+//            displayTextOnScreen(grpOff,
+//                    "GAME OVER",
+//                    "use the arrow keys to turn left/right/up/down",
+//                    "use the space bar to fire",
+//                    "'S' to Start",
+//                    "'P' to Pause",
+//                    "'Q' to Quit",
+//                    "'M' to toggle music"
+//
+//            );
+
+
         } else if (CommandCenter.getInstance().isPaused()) {
 
             displayTextOnScreen(grpOff, "Game Paused");
@@ -269,7 +274,19 @@ public class GamePanel extends Panel {
 
     }
 
+    private void drawMainEntrance(Graphics g){
 
+        BufferedImage img = loadGraphic("/imgs/UI/MainResized.png");
+        if (img != null){
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Draw the image with the scaling transformation applied
+            g2d.drawImage(img, Game.DIM.width/2 - img.getWidth() / 2 , Game.DIM.height/2 - img.getHeight() / 2, null);
+
+            g2d.dispose();
+        }
+
+    }
 
 
     // Draw the number of falcons remaining on the bottom-right of the screen.
@@ -288,7 +305,7 @@ public class GamePanel extends Panel {
 
 
         g.setFont(fontNormal);
-        g.drawString("LEVEL :  " + (CommandCenter.getInstance().getLevel()+1), 275,
+        g.drawString("LEVEL :  " + (CommandCenter.getInstance().getLevel()+1) +"/ 6", 275,
                 50);
         g.drawString(CommandCenter.getInstance().numStar + " / " +
                         CommandCenter.getInstance().maxStar, 730,
