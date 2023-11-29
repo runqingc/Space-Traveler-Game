@@ -16,7 +16,7 @@ public class EnemyBlack2 extends EnemyShip{
     public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND * 2;
 
     public static int[] SPAWN_TIME = {-1, Game.FRAMES_PER_SECOND * 9,
-            Game.FRAMES_PER_SECOND * 11, Game.FRAMES_PER_SECOND * 11, Game.FRAMES_PER_SECOND * 13, Game.FRAMES_PER_SECOND * 11};
+            Game.FRAMES_PER_SECOND * 11, Game.FRAMES_PER_SECOND * 11, Game.FRAMES_PER_SECOND * 13, Game.FRAMES_PER_SECOND * 22};
 
 
     // the health is related to its radius

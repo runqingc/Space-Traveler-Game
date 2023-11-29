@@ -13,7 +13,7 @@ public class EnemyBlack4 extends EnemyShip{
     // need to set its fire logic
     public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND * 3;
 
-    public static int[] SPAWN_TIME = {-1, -1, -1, -1, Game.FRAMES_PER_SECOND * 10, Game.FRAMES_PER_SECOND * 14};
+    public static int[] SPAWN_TIME = {-1, -1, -1, -1, Game.FRAMES_PER_SECOND * 10, Game.FRAMES_PER_SECOND * 30};
 
     public EnemyBlack4(){
 

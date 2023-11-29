@@ -12,7 +12,7 @@ public class EnemyBlack5 extends EnemyShip{
     public int lastFirePosition;
 
     public static int[] SPAWN_TIME = {-1, -1,
-            -1, Game.FRAMES_PER_SECOND * 8, Game.FRAMES_PER_SECOND * 17, Game.FRAMES_PER_SECOND * 7};
+            -1, Game.FRAMES_PER_SECOND * 8, Game.FRAMES_PER_SECOND * 17, Game.FRAMES_PER_SECOND * 20};
 
     public static long SHOOTING_INTERVAL = Game.FRAMES_PER_SECOND * 3/2;
     public EnemyBlack5(){

@@ -186,25 +186,25 @@ public class Game implements Runnable, KeyListener {
         int level = CommandCenter.getInstance().getLevel();
         if(level>5) return;
         // traverse all kinds of foes
-        if ((Asteroid.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+        if ((Asteroid.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % Asteroid.SPAWN_TIME[level] == 0) {
             spawnBigAsteroids(1);
         }
-        if ((EnemyBlack1.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+        if ((EnemyBlack1.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack1.SPAWN_TIME[level] == 0) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack1(), GameOp.Action.ADD);
         }
-        if ((EnemyBlack2.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+        if ((EnemyBlack2.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack2.SPAWN_TIME[level] == 0) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack2(), GameOp.Action.ADD);
         }
         if ((EnemyBlack3.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack3(), GameOp.Action.ADD);
         }
-        if ((EnemyBlack4.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+        if ((EnemyBlack4.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack4.SPAWN_TIME[level] == 0) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack4(), GameOp.Action.ADD);
         }
-        if ((EnemyBlack5.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+        if ((EnemyBlack5.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack5.SPAWN_TIME[level] == 0) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyBlack5(), GameOp.Action.ADD);
         }
-        if ((EnemyYellowUFO.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyBlack3.SPAWN_TIME[level] == 0) {
+        if ((EnemyYellowUFO.SPAWN_TIME[level]>0) && CommandCenter.getInstance().getFrame() % EnemyYellowUFO.SPAWN_TIME[level] == 0) {
             CommandCenter.getInstance().getOpsQueue().enqueue(new EnemyYellowUFO(), GameOp.Action.ADD);
         }
 
