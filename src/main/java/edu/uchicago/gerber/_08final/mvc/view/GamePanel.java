@@ -240,12 +240,14 @@ public class GamePanel extends Panel {
                     CommandCenter.getInstance().getMovForegrounds()
                     );
 
+            if(CommandCenter.getInstance().getNumFalcons()>=1){
+                drawNumberShipsRemaining(grpOff);
+                drawMeters(grpOff);
+                drawFalconStatus(grpOff);
+                drawStarCollecting(grpOff);
+                drawBossHealth(grpOff);
+            }
 
-            drawNumberShipsRemaining(grpOff);
-            drawMeters(grpOff);
-            drawFalconStatus(grpOff);
-            drawStarCollecting(grpOff);
-            drawBossHealth(grpOff);
 
         }
 

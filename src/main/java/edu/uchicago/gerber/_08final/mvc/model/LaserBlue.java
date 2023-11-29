@@ -155,6 +155,7 @@ public class LaserBlue extends Laser{
     }
 
     private void renderLaserRaster(Graphics2D g2d, BufferedImage bufferedImage) {
+        if(bufferedImage==null) return;
         double angleRadians = Math.toRadians(0);
 
         switch (laserType){

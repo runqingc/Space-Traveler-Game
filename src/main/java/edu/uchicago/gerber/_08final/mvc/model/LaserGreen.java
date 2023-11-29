@@ -58,6 +58,7 @@ public class LaserGreen extends Laser {
     @Override
     public void draw(Graphics g) {
         BufferedImage img = getRasterMap().get(0);
+
         if (img != null) {
             Graphics2D g2d = (Graphics2D) g.create();
 

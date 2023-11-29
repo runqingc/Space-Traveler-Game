@@ -37,6 +37,12 @@ public class EnemyBOSS extends EnemyShip{
     @Override
     public void move() {
 
+        // if the Boss is dying, stop moving
+        if(health<=0){
+            return ;
+        }
+
+
         //The following code block just keeps the sprite inside the bounds of the frame.
         //To ensure this behavior among all sprites in your game, make sure to call super.move() in extending classes
         // where you need to override the move() method.

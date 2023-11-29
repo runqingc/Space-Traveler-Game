@@ -109,17 +109,21 @@ public class Game implements Runnable, KeyListener {
             // see GamePanel class for details
             gamePanel.update(gamePanel.getGraphics());
 
-            if(!CommandCenter.getInstance().isGameOver() && !CommandCenter.getInstance().isPaused()){
+            if(!CommandCenter.getInstance().isGameOver() && !CommandCenter.getInstance().isPaused()
+                    && CommandCenter.getInstance().getLevel()<=5 ){
+                // if boss dies and level up to 6, cease fire
                 checkHint();
-                checkCollisions();
-                checkBlueRain();
-                checkGreenRain();
-                checkFloaters();
-                checkFalconFire();
+                if(CommandCenter.getInstance().getNumFalcons()>0){
+                    checkBlueRain();
+                    checkGreenRain();
+                    checkFloaters();
+                    checkFalconFire();
+                }
                 checkEnemyFire();
                 checkFoes();
-
+                checkCollisions();
             }
+
 
 
             //keep track of the frame for development purposes
@@ -216,10 +220,6 @@ public class Game implements Runnable, KeyListener {
             stopLoopingSounds(soundBackground);
             soundBackground = Sound.clipForLoopFactory("reduced_boss.wav");
             soundBackground.loop(Clip.LOOP_CONTINUOUSLY);
-        }else{
-            System.out.println(CommandCenter.getInstance().getLevel());
-            System.out.println(CommandCenter.getInstance().getNumBoss());
-
         }
 
 
@@ -263,7 +263,7 @@ public class Game implements Runnable, KeyListener {
                 if (CommandCenter.getInstance().getFrame() % EnemyBlack5.SHOOTING_INTERVAL == 0){
                     if(enemyBlack5.lastFirePosition==1){
                         enemyBlack5.lastFirePosition--;
-                        System.out.println("pos"+enemyBlack5.lastFirePosition);
+
                         CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.S), GameOp.Action.ADD);
                         CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NE), GameOp.Action.ADD);
                         CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.NW), GameOp.Action.ADD);
@@ -273,7 +273,7 @@ public class Game implements Runnable, KeyListener {
                         CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SW), GameOp.Action.ADD);
                         CommandCenter.getInstance().getOpsQueue().enqueue(new GreyBullet02((EnemyShip) movFoe, GreyBullet02.BulletType.SE), GameOp.Action.ADD);
                         enemyBlack5.lastFirePosition++;
-                        System.out.println("pos"+enemyBlack5.lastFirePosition);
+
                     }
                 }
             } else if (movFoe instanceof EnemyYellowUFO) {
@@ -393,6 +393,7 @@ public class Game implements Runnable, KeyListener {
                             CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenDebris((Sprite) movFriend), GameOp.Action.ADD);
                         }
 
+
                         //remove the foe on some occasion
                         // Inside your collision detection logic
                         if (movFoe instanceof EnemyShip) {
@@ -499,8 +500,51 @@ public class Game implements Runnable, KeyListener {
     private void handleLaserEnemyCollision(Laser laser, EnemyShip enemyShip) {
         enemyShip.health -= laser.DAMAGE;
         if (enemyShip.health <= 0) {
-            CommandCenter.getInstance().getOpsQueue().enqueue(enemyShip, GameOp.Action.REMOVE);
-            CommandCenter.getInstance().getOpsQueue().enqueue(new RedCloudDebris(enemyShip), GameOp.Action.ADD);
+            // boss dying
+            if(enemyShip instanceof EnemyBOSS){
+                // instantly kill all the other foes
+                EnemyBOSS enemyBOSS = (EnemyBOSS) enemyShip;
+                for (Movable movFoe : CommandCenter.getInstance().getMovFoes()){
+                    if(movFoe instanceof EnemyShip && !(movFoe instanceof EnemyBOSS)){
+                        EnemyShip enemyShip1 =  (EnemyShip)movFoe;
+                        enemyShip1.health=0;
+                        CommandCenter.getInstance().getOpsQueue().enqueue(enemyShip, GameOp.Action.REMOVE);
+                        System.out.println("removed: "+movFoe.getClass());
+                        CommandCenter.getInstance().getOpsQueue().enqueue(new RedCloudDebris(enemyShip), GameOp.Action.ADD);
+                    }
+                }
+                // level up so that no foes spawning
+                CommandCenter.getInstance().setLevel(6);
+                CommandCenter.getInstance().setNumBoss(0);
+
+                // protect the ship
+                Sound.playSound("shieldup.wav");
+                CommandCenter.getInstance().getOpsQueue().enqueue(new Shield2(CommandCenter.getInstance().getFalcon()), GameOp.Action.ADD);
+
+                // multiple explosion around the boss
+                for(int i=0; i<5; ++i){
+                    CommandCenter.getInstance().getOpsQueue().enqueue(new RedCloudDebris(enemyBOSS), GameOp.Action.ADD);
+                }
+
+                CommandCenter.getInstance().getMovFoes().clear();
+
+                // add logic to victory
+                CommandCenter.getInstance().getOpsQueue().enqueue(new Victory(), GameOp.Action.ADD);
+
+                // switch to victory sound
+                stopLoopingSounds(soundBackground);
+                soundBackground = Sound.clipForLoopFactory("victory.wav");
+                soundBackground.loop(Clip.LOOP_CONTINUOUSLY);
+
+
+            }else{
+                // regular enemy ship dying
+                CommandCenter.getInstance().getOpsQueue().enqueue(enemyShip, GameOp.Action.REMOVE);
+                System.out.println("removed: "+enemyShip.getClass());
+                CommandCenter.getInstance().getOpsQueue().enqueue(new RedCloudDebris(enemyShip), GameOp.Action.ADD);
+            }
+
+
         }
     }
 
@@ -531,6 +575,8 @@ public class Game implements Runnable, KeyListener {
                             EnemyShip enemyShip = (EnemyShip) mov;
                             CommandCenter.getInstance().setScore(CommandCenter.getInstance().getScore()+enemyShip.health);
                         }
+
+
                     }
 
                     break;
@@ -539,7 +585,23 @@ public class Game implements Runnable, KeyListener {
                         CommandCenter.getInstance().getMovFriends().add(mov);
                     } else { //GameOp.Operation.REMOVE
                         if (mov instanceof Falcon) {
-                            CommandCenter.getInstance().initFalconAndDecrementFalconNum();
+
+                            // init falcon if there's still some
+                            if(CommandCenter.getInstance().getNumFalcons()<=1){
+                                CommandCenter.getInstance().getMovFriends().remove(mov);
+                                // enqueue defeat sign
+                                System.out.println("num falcon:" +CommandCenter.getInstance().getNumFalcons());
+                                CommandCenter.getInstance().setNumFalcons(0);
+                                CommandCenter.getInstance().getOpsQueue().enqueue(new Defeat(), GameOp.Action.ADD);
+                                stopLoopingSounds(soundBackground);
+                                Sound.playSound("lose.wav");
+
+
+                            }else{
+                                CommandCenter.getInstance().initFalconAndDecrementFalconNum();
+                            }
+
+
                         } else {
                             CommandCenter.getInstance().getMovFriends().remove(mov);
                         }
@@ -644,7 +706,7 @@ public class Game implements Runnable, KeyListener {
     }
 
     private void spawnStarGoldFloater(){
-        if(CommandCenter.getInstance().getFrame() % StarGold.SPAWN_STAR_GOLD ==0 ){
+        if(CommandCenter.getInstance().getLevel()<5 && CommandCenter.getInstance().getFrame() % StarGold.SPAWN_STAR_GOLD ==0 ){
             CommandCenter.getInstance().getOpsQueue().enqueue(new StarGold(), GameOp.Action.ADD);
         }
     }
@@ -857,7 +919,7 @@ public class Game implements Runnable, KeyListener {
         Falcon falcon = CommandCenter.getInstance().getFalcon();
         int keyCode = e.getKeyCode();
         //show the key-code in the console
-        System.out.println(keyCode);
+
 
         switch (keyCode) {
             case FIRE:
@@ -878,7 +940,13 @@ public class Game implements Runnable, KeyListener {
 //                    CommandCenter.getInstance().getFalcon().setNukeMeter(0);
 //                }
 
-                // new logic to come to next level is N is pressed
+                // new logic to come to new game is N is pressed
+                if(CommandCenter.getInstance().getNumFalcons()<=0 || CommandCenter.getInstance().getLevel()>=6){
+                    CommandCenter.getInstance().setGameOver(true);
+                    stopLoopingSounds(soundBackground);
+                    soundBackground = Sound.clipForLoopFactory("bgm.wav");
+                    soundBackground.loop(Clip.LOOP_CONTINUOUSLY);
+                }
 
 
                 break;

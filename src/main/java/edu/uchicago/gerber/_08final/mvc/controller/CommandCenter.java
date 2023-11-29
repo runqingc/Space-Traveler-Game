@@ -4,6 +4,7 @@ package edu.uchicago.gerber._08final.mvc.controller;
 
 import edu.uchicago.gerber._08final.mvc.model.*;
 import lombok.Data;
+import lombok.Getter;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -25,6 +26,12 @@ public class CommandCenter {
 	private  int level;
 	private  long score;
 	private  boolean paused;
+
+	//if the number of falcons is zero, then game over
+	//		return numFalcons < 1;
+	@Getter
+	private boolean gameOver = true;
+
 	private  boolean muted = false;
 
 	//this value is used to count the number of frames (full animation cycles) in the game
@@ -65,14 +72,17 @@ public class CommandCenter {
 
 	public void initGame(){
 		clearAll();
+		setGameOver(false);
 		generateStarField();
 		setLevel(0);
 		setScore(0);
 		setPaused(false);
 		//set to one greater than number of falcons lives in your game as initFalconAndDecrementNum() also decrements
 		setNumFalcons(5);
+		System.out.println("numFalcons0: "+numFalcons);
 		setNumStar(0);
 		setNumBoss(0);
+		setEnemyBOSS(null);
 		initFalconAndDecrementFalconNum();
 //		setMuted(false);
 		//add the falcon to the movFriends list
@@ -98,7 +108,9 @@ public class CommandCenter {
 
 	public void initFalconAndDecrementFalconNum(){
 		numFalcons--;
-		if (isGameOver()) return;
+
+
+//		if (isGameOver()) return;
 		Sound.playSound("shipspawn.wav");
 //		falcon.setShield(Falcon.INITIAL_SPAWN_TIME);
 		falcon.setInvisible(Falcon.INITIAL_SPAWN_TIME/4);
@@ -131,11 +143,6 @@ public class CommandCenter {
 		movFoes.clear();
 		movFloaters.clear();
 	}
-
-	public boolean isGameOver() {		//if the number of falcons is zero, then game over
-		return numFalcons < 1;
-	}
-
 
 
 }

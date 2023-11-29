@@ -93,7 +93,7 @@ public class LaserRed extends Laser{
     }
 
     private void renderLaserRaster(Graphics2D g2d, BufferedImage bufferedImage){
-
+        if(bufferedImage==null) return;
         double angleRadians = this.getOrientation();
         AffineTransform transform = new AffineTransform();
         transform.translate(getCenter().x, getCenter().y);

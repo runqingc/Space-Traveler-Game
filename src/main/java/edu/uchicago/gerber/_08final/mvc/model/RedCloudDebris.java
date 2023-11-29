@@ -27,12 +27,25 @@ public class RedCloudDebris extends Sprite{
         //expire it out after it has done its animation. Multiply by 2 to slow down the animation
         setExpiry(rasterMap.size() * 2);
 
+        if(explodingSprite instanceof EnemyBOSS){
+            setSpin(somePosNegValue(10));
+            setCenter(new Point(explodingSprite.getCenter().x+somePosNegValue(300),
+                    explodingSprite.getCenter().y+somePosNegValue(150)));
+            setDeltaX(0);
+            setDeltaY(0);
+            setRadius(200);
+            return ;
+        }
+
         //everything is relative to the exploding sprite
         setSpin(explodingSprite.getSpin());
         setCenter(explodingSprite.getCenter());
         setDeltaX(explodingSprite.getDeltaX());
         setDeltaY(explodingSprite.getDeltaY());
         setRadius((int) (explodingSprite.getRadius()));
+
+
+
     }
 
 
