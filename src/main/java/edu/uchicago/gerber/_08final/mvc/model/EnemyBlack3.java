@@ -12,7 +12,7 @@ public class EnemyBlack3 extends EnemyShip{
 
 
     // SPAWN_TIME[i] is the spawn time for level i
-    public static int[] SPAWN_TIME = {Game.FRAMES_PER_SECOND * 7, Game.FRAMES_PER_SECOND * 7,
+    public static int[] SPAWN_TIME = {Game.FRAMES_PER_SECOND * 4, Game.FRAMES_PER_SECOND * 7,
             Game.FRAMES_PER_SECOND * 7, Game.FRAMES_PER_SECOND * 7, Game.FRAMES_PER_SECOND * 7, Game.FRAMES_PER_SECOND * 14};
 
     public EnemyBlack3() {

@@ -307,7 +307,7 @@ public class GamePanel extends Panel {
 
 
         g.setFont(fontNormal);
-        g.drawString("LEVEL :  " + (CommandCenter.getInstance().getLevel()+1) +"/ 6", 275,
+        g.drawString("LEVEL :  " + Math.min((CommandCenter.getInstance().getLevel()+1),6) +"/ 6", 275,
                 50);
         g.drawString(CommandCenter.getInstance().numStar + " / " +
                         CommandCenter.getInstance().maxStar, 730,
