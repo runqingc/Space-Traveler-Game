@@ -31,6 +31,24 @@ public class StarGold extends Floater{
         setExpiry(5000);
     }
 
+    public StarGold(EnemyShip enemyShip){
+        setRadius(20);
+
+        setCenter(enemyShip.getCenter());
+
+        Map<Integer, BufferedImage> rasterMap = new HashMap<>();
+        rasterMap.put(0, loadGraphic("/imgs/powerUp/star_gold.png"));
+        setRasterMap(rasterMap);
+
+        // remain in the old place
+        setDeltaX(0);
+        setDeltaY(0);
+
+        // do not expire until out of frame
+        setExpiry(300);
+    }
+
+
     private boolean isOutOfFrame() {
         return getCenter().x < 0 || getCenter().x > Game.DIM.width ||
                 getCenter().y < 0 || getCenter().y > Game.DIM.height;

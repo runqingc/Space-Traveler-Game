@@ -174,7 +174,7 @@ public class Game implements Runnable, KeyListener {
 
             CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenRain(Game.DIM.width/2 + LaserGreenRain.POS),  GameOp.Action.ADD);
             CommandCenter.getInstance().getOpsQueue().enqueue(new LaserGreenRain(Game.DIM.width/2 - LaserGreenRain.POS),  GameOp.Action.ADD);
-            if(LaserGreenRain.POS+20>Game.DIM.width/2){
+            if(LaserGreenRain.POS+20>Game.DIM.width/2 && CommandCenter.getInstance().getLevel()<5){
                 CommandCenter.getInstance().getOpsQueue().enqueue(new LevelUp(),  GameOp.Action.ADD);
             }
             LaserGreenRain.POS+=20;
@@ -542,6 +542,7 @@ public class Game implements Runnable, KeyListener {
                 CommandCenter.getInstance().getOpsQueue().enqueue(enemyShip, GameOp.Action.REMOVE);
                 System.out.println("removed: "+enemyShip.getClass());
                 CommandCenter.getInstance().getOpsQueue().enqueue(new RedCloudDebris(enemyShip), GameOp.Action.ADD);
+
             }
 
 
@@ -574,6 +575,9 @@ public class Game implements Runnable, KeyListener {
                         if (mov instanceof EnemyShip){
                             EnemyShip enemyShip = (EnemyShip) mov;
                             CommandCenter.getInstance().setScore(CommandCenter.getInstance().getScore()+enemyShip.health);
+                            if(!(enemyShip instanceof GreyBullet02)){
+                                CommandCenter.getInstance().getOpsQueue().enqueue(new StarGold(enemyShip), GameOp.Action.ADD);
+                            }
                         }
 
 
@@ -706,7 +710,7 @@ public class Game implements Runnable, KeyListener {
     }
 
     private void spawnStarGoldFloater(){
-        if(CommandCenter.getInstance().getLevel()<5 && CommandCenter.getInstance().getFrame() % StarGold.SPAWN_STAR_GOLD ==0 ){
+        if(CommandCenter.getInstance().getLevel()<=5 && CommandCenter.getInstance().getFrame() % StarGold.SPAWN_STAR_GOLD ==0 ){
             CommandCenter.getInstance().getOpsQueue().enqueue(new StarGold(), GameOp.Action.ADD);
         }
     }

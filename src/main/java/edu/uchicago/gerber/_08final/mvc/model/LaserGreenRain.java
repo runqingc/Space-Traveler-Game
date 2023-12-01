@@ -22,7 +22,7 @@ public class LaserGreenRain extends Laser{
 
         setRadius(15); // Size of the laser
 
-        DAMAGE = 200;
+        DAMAGE = 150;
 
         setOrientation(0); // Start angle
 
