@@ -2,7 +2,7 @@
 
 
 
-![image-20231201131407125](/Users/cairunqing/Library/Application Support/typora-user-images/image-20231201131407125.png)
+![image-20231201131407125](/src/main/resources/imgs/Latex/Hint1.png)
 
 ## THE SPACE TRAVELER - SURVIVAL GUIDE
 
