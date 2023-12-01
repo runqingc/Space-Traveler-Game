@@ -2,7 +2,7 @@
 
 
 
-![image-20231201131407125](/src/main/resources/imgs/Latex/Hint1.png)
+<img src="/src/main/resources/imgs/Latex/MainEntrance.png" alt="image-20231201131433765" style="zoom:50%;" />
 
 ## THE SPACE TRAVELER - SURVIVAL GUIDE
 
@@ -10,7 +10,11 @@
 
 
 
-<img src="/Users/cairunqing/Library/Application Support/typora-user-images/image-20231201131433765.png" alt="image-20231201131433765" style="zoom:50%;" />
+<img src="/src/main/resources/imgs/Latex/Hint1.png" alt="image-20231201131433765" style="zoom:50%;" />
+
+<img src="/src/main/resources/imgs/Latex/Hint2.png" alt="image-20231201131433765" style="zoom:50%;" />
+
+<img src="/src/main/resources/imgs/Latex/Hint3.png" alt="image-20231201131433765" style="zoom:50%;" />
 
 
 
