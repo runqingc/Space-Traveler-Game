@@ -18,21 +18,27 @@
 
 
 
-<img src="/Users/cairunqing/Library/Application Support/typora-user-images/image-20231201131445013.png" alt="image-20231201131445013" style="zoom:50%;" />
 
 
 
-<img src="/Users/cairunqing/Library/Application Support/typora-user-images/image-20231201131916774.png" alt="image-20231201131916774" style="zoom:50%;" />
+
+
 
 
 
 Collect 15 satrs and you will be allowed to go to next level
 
-<img src="/Users/cairunqing/Library/Application Support/typora-user-images/image-20231201132025612.png" alt="image-20231201132025612" style="zoom:33%;" />
+<img src="/src/main/resources/imgs/Latex/LevelUp.png" style="zoom:50%;" />
+
+
+
+
 
 Defeat the BOSS and win the trophy!
 
-<img src="/Users/cairunqing/Library/Application Support/typora-user-images/image-20231201165447435.png" alt="image-20231201165447435" style="zoom:50%;" />
+<img src="/src/main/resources/imgs/Latex/Victory.png" alt="image-20231201131433765" style="zoom:50%;" />
+
+
 
 
 
