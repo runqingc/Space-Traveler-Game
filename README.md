@@ -1,19 +1,56 @@
-## All homework assignments base-code for Java Programming UChicago MPCS 51036
-
-This project contains all the base code you will need for your homework (called projects) in Java Programming 51036 -- but not the answers :(
-There are also some simple examples in this project. Each package (e.g. _01control) contains a file called _instructions.txt which contains instructions for each project.
-
-## the master branch
-
-The master branch is the branch that your graders will grade. No other branch will be graded.
-
-
-## Access
-
-You will fork this project and then push to it as you complete your assignments.
-You may create however many branches you like, but be sure to merge those changes back to master as master is the only branch that the graders will evaluate.
-
-If you don't know how to merge, stay on master...or ask me during office hours and I will show you how to merge.
+# README
 
 
 
+<img src="/src/main/resources/imgs/Latex/MainEntrance.png" alt="image-20231201131433765" style="zoom:50%;" />
+
+## THE SPACE TRAVELER - SURVIVAL GUIDE
+
+
+
+
+
+<img src="/src/main/resources/imgs/Latex/Hint1.png" alt="image-20231201131433765" style="zoom:50%;" />
+
+<img src="/src/main/resources/imgs/Latex/Hint2.png" alt="image-20231201131433765" style="zoom:50%;" />
+
+<img src="/src/main/resources/imgs/Latex/Hint3.png" alt="image-20231201131433765" style="zoom:50%;" />
+
+
+
+
+
+
+
+
+
+
+
+Collect 15 satrs and you will be allowed to go to next level
+
+<img src="/src/main/resources/imgs/Latex/LevelUp.png" style="zoom:50%;" />
+
+
+
+
+
+Defeat the BOSS and win the trophy!
+
+<img src="/src/main/resources/imgs/Latex/Victory.png" alt="image-20231201131433765" style="zoom:50%;" />
+
+
+
+
+
+## REFERENCES
+
+1. Image references:
+
+   https://opengameart.org/
+
+2 . Sound and sound effect references:
+https://opengameart.org/
+
+​	https://pixabay.com/
+
+   
